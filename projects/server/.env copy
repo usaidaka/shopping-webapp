@@ -1,0 +1,17 @@
+PORT = 
+
+MY_EMAIL = 
+MY_PASSWORD = 
+
+ACCESS_TOKEN_SECRET = 
+
+DB_USERNAME = root
+DB_PASSWORD = Usaidaka-2
+DB_DATABASE_DEV = shopping_webapp_development
+DB_DATABASE_TEST = shopping_webapp__test
+DB_DATABASE_PRD = shopping_webapp__production
+DB_HOST = 127.0.0.1
+DB_DIALECT = mysql
+
+BASEPATH=http://localhost:8000
+BASEPATH_FE_REACT=http://localhost:3000
