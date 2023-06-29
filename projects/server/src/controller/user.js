@@ -28,17 +28,18 @@ const register = async (req, res) => {
     const isUsernameExist = await User.findOne({ where: { username } });
     const isPhoneExist = await User.findOne({ where: { phone } });
     const isStoreExist = await User.findOne({ where: { store_name } });
-    if (isEmailExist) {
-      return res.status(409).json({
-        ok: false,
-        message: "Email already used",
-      });
-    }
 
     if (isUsernameExist) {
       return res.status(409).json({
         ok: false,
         message: "username already used",
+      });
+    }
+
+    if (isEmailExist) {
+      return res.status(409).json({
+        ok: false,
+        message: "email already used",
       });
     }
 
@@ -52,7 +53,7 @@ const register = async (req, res) => {
     if (isStoreExist) {
       return res.status(409).json({
         ok: false,
-        message: "Store name already used",
+        message: "store name already used",
       });
     }
 
