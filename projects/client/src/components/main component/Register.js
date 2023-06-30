@@ -40,7 +40,7 @@ const Register = () => {
             "Sign up successful. Please check your email for verification.",
         });
         setIsVisible(true);
-        navigate("/homepage");
+        navigate("/login");
       } else {
         throw new Error("Register Failed");
       }
