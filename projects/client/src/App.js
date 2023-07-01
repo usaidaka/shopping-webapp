@@ -4,6 +4,7 @@ import Register from "./components/main component/Register";
 import HomePage from "./components/main component/HomePage";
 import Navbar from "./components/main component/Navbar";
 import FooterMobile from "./components/main component/FooterMobile";
+import EditCategory from "./components/main component/EditCategory";
 
 function App() {
   return (
@@ -13,6 +14,10 @@ function App() {
         <Route path="/homepage" element={<HomePage />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route
+          path="/profile/my-store/edit-category"
+          element={<EditCategory />}
+        />
       </Routes>
       <FooterMobile />
     </Router>

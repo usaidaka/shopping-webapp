@@ -15,11 +15,11 @@ const TopSellingProduct = () => {
   }
   console.log(products);
   return (
-    <Carousel>
+    <Carousel indicators={false} leftControl={null} rightControl={null}>
       {products.map((product) => (
         <div
           key={product.id}
-          className="grid grid-cols-4 rounded-lg drop-shadow-lg"
+          className="grid grid-cols-4 rounded-lg drop-shadow-lg w-full  "
         >
           <div className="col-span-1 flex justify-center items-center rounded-lg">
             <img src={product.image} alt="" className="h-16" />

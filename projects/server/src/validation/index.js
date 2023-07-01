@@ -68,8 +68,13 @@ const loginValidation = [
     ),
 ];
 
+const editCategoryValidation = [
+  check("category_name", "category name cannot be empty").notEmpty(),
+];
+
 module.exports = {
   runValidation,
   registerValidation,
   loginValidation,
+  editCategoryValidation,
 };
