@@ -1,25 +1,19 @@
-import { Fragment, useState } from "react";
-import { Dialog, Disclosure, Popover, Transition } from "@headlessui/react";
+import { useState } from "react";
+import { Dialog, Popover } from "@headlessui/react";
 import {
-  ArrowPathIcon,
   Bars3Icon,
-  ChartPieIcon,
-  CursorArrowRaysIcon,
-  FingerPrintIcon,
-  SquaresPlusIcon,
   ShoppingCartIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import {
-  ChevronDownIcon,
-  PhoneIcon,
-  PlayCircleIcon,
-} from "@heroicons/react/20/solid";
+
 import imageProfile from "../../assets/image_porfile_dummy.png";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const location = useLocation();
+
+  const token = localStorage.getItem("token");
 
   return (
     <header className="bg-white">
@@ -47,28 +41,50 @@ export default function Navbar() {
             <Bars3Icon className="h-6 w-6" aria-hidden="true" />
           </button>
         </div>
+
         <Popover.Group className="hidden lg:flex lg:gap-x-12">
           <Link
-            to="#"
-            className="text-sm font-semibold leading-6 text-gray-900"
+            to="/homepage"
+            className={`text-sm font-semibold leading-6 ${
+              location.pathname === "/homepage"
+                ? "text-yellow-active"
+                : "text-gray-900"
+            }`}
           >
             Home
           </Link>
           <Link
-            to="#"
-            className="text-sm font-semibold leading-6 text-gray-900"
+            to="/category"
+            className={`text-sm font-semibold leading-6 ${
+              location.pathname === "/category"
+                ? "text-yellow-active"
+                : "text-gray-900"
+            }`}
           >
             Category
           </Link>
           <Link
-            to="#"
-            className="text-sm font-semibold leading-6 text-gray-900"
+            to="/cart"
+            className={`text-sm font-semibold leading-6 ${
+              location.pathname === "/cart"
+                ? "text-yellow-active"
+                : "text-gray-900"
+            }`}
           >
             Cart
           </Link>
           <Link
-            to="#"
-            className="text-sm font-semibold leading-6 text-gray-900"
+            to="/profile"
+            className={`text-sm font-semibold leading-6 ${
+              location.pathname === "/profile" ||
+              location.pathname === "/profile/my-transaction" ||
+              location.pathname === "/profile/store-transaction" ||
+              location.pathname === "/profile/sell-product" ||
+              location.pathname === "/profile/my-store" ||
+              location.pathname === "/profile/my-store/edit-category"
+                ? "text-yellow-active"
+                : "text-gray-900"
+            }`}
           >
             Profile
           </Link>
@@ -110,40 +126,66 @@ export default function Navbar() {
               <XMarkIcon className="h-6 w-6" aria-hidden="true" />
             </button>
           </div>
+
           <div className="mt-6 flow-root">
             <div className="-my-6 divide-y divide-gray-500/10">
               <div className="space-y-2 py-6">
                 <Link
-                  to="#"
-                  className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                  to="/homepage"
+                  className={`-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 ${
+                    location.pathname === "/homepage"
+                      ? "text-yellow-active"
+                      : "text-gray-900"
+                  } hover:bg-gray-50`}
+                  onClick={() => setMobileMenuOpen(false)}
                 >
                   Home
                 </Link>
                 <Link
-                  to="#"
-                  className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                  to="/category"
+                  className={`-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 ${
+                    location.pathname === "/category"
+                      ? "text-yellow-active"
+                      : "text-gray-900"
+                  } hover:bg-gray-50`}
+                  onClick={() => setMobileMenuOpen(false)}
                 >
                   Category
                 </Link>
                 <Link
-                  to="#"
-                  className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                  to="/cart"
+                  className={`-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 ${
+                    location.pathname === "/cart"
+                      ? "text-yellow-active"
+                      : "text-gray-900"
+                  } hover:bg-gray-50`}
+                  onClick={() => setMobileMenuOpen(false)}
                 >
                   Cart
                 </Link>
                 <Link
-                  to="#"
-                  className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                  to="profile"
+                  className={`-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 ${
+                    location.pathname === "/profile" ||
+                    location.pathname === "/profile/my-transaction" ||
+                    location.pathname === "/profile/store-transaction" ||
+                    location.pathname === "/profile/sell-product" ||
+                    location.pathname === "/profile/my-store"
+                      ? "text-yellow-active"
+                      : "text-gray-900"
+                  } hover:bg-gray-50`}
+                  onClick={() => setMobileMenuOpen(false)}
                 >
                   Profile
                 </Link>
               </div>
               <div className="py-6">
                 <Link
-                  to="#"
+                  to="/login"
                   className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                  onClick={() => setMobileMenuOpen(false)}
                 >
-                  Log in
+                  {`${token ? "Log out" : "Login"} `}
                 </Link>
               </div>
             </div>

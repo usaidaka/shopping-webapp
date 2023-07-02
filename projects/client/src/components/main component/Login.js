@@ -19,6 +19,8 @@ const Login = () => {
         headers: { "Content-Type": "application/json" },
       });
       console.log(response);
+      console.log(response.data?.accessToken);
+
       if (response.status === 200) {
         setStatus({ success: true });
         setValues({

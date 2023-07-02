@@ -13,7 +13,7 @@ const TopSellingProduct = () => {
   if (products.length === 0) {
     return <p></p>;
   }
-  console.log(products);
+
   return (
     <Carousel indicators={false} leftControl={null} rightControl={null}>
       {products.map((product) => (

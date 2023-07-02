@@ -63,10 +63,10 @@ const InputEditCategory = () => {
         setSelectedCategory("select a category");
         setErrMsg("category already exist, please choose one");
       } else if (
-        error.response?.data?.message === "category name cannot be empty"
+        error.response?.data?.message === "new category name cannot be empty"
       ) {
         setSelectedCategory("select a category");
-        setErrMsg("category name cannot be empty");
+        setErrMsg("new category name cannot be empty");
       } else {
         setErrMsg("something bad happen");
       }
@@ -132,14 +132,14 @@ const InputEditCategory = () => {
             ))}
           </select>
           <label className="block text-sm font-medium text-gray-900 dark:text-white">
-            category name
+            new category
           </label>
           <FormControl isInvalid={formik.errors.category_name}>
             <input
               type="text"
               className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-strong focus:border-green-strong block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-strong dark:focus:focus:border-green-strong"
               onChange={handleForm}
-              placeholder="category name"
+              placeholder="new category name"
               name="category_name"
               autoComplete="off"
               value={formik.values.category_name}
