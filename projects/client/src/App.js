@@ -6,6 +6,7 @@ import Navbar from "./components/main component/Navbar";
 import FooterMobile from "./components/main component/FooterMobile";
 import EditCategory from "./components/main component/EditCategory";
 import Category from "./components/main component/Category";
+import FooterDesktop from "./components/main component/FooterDesktop";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         />
       </Routes>
       <FooterMobile />
+      <FooterDesktop />
     </Router>
   );
 }

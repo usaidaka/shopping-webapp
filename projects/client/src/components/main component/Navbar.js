@@ -5,15 +5,24 @@ import {
   ShoppingCartIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 import imageProfile from "../../assets/image_porfile_dummy.png";
-import { Link, useLocation } from "react-router-dom";
+import { setTokenAccess } from "../../thunk/authSlice";
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const dispatch = useDispatch();
+  const token = useSelector((state) => state.auth.value);
   const location = useLocation();
+  const navigate = useNavigate();
 
-  const token = localStorage.getItem("token");
+  const handleLogOut = () => {
+    dispatch(setTokenAccess(null));
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
 
   return (
     <header className="bg-white">
@@ -22,7 +31,7 @@ export default function Navbar() {
         aria-label="Global"
       >
         <div className="flex lg:flex-1">
-          <Link to="#" className="-m-1.5 p-1.5">
+          <Link to="/homepage" className="-m-1.5 p-1.5">
             <span className="sr-only">Your Company</span>
             <img
               className="h-8 w-auto"
@@ -89,16 +98,32 @@ export default function Navbar() {
             Profile
           </Link>
         </Popover.Group>
-        <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:gap-6">
-          <Link to="/profile">
-            <img
-              src={imageProfile}
-              alt=""
-              className="lg:w-10 lg:rounded-full"
-            />
-          </Link>
-          <ShoppingCartIcon className="lg:w-8" />
-        </div>
+        {token ? (
+          <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:gap-6">
+            <Link to="/profile">
+              <img
+                src={imageProfile}
+                alt=""
+                className="lg:w-10 lg:rounded-full"
+              />
+            </Link>
+            <Link to="/cart" className="lg:w-8">
+              <ShoppingCartIcon />
+            </Link>
+            <button className="hidden lg:block" onClick={() => handleLogOut()}>
+              Log out
+            </button>
+          </div>
+        ) : (
+          <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:gap-6">
+            <Link to="/login">
+              <button>Login</button>
+            </Link>
+            <Link to="/register">
+              <button>Sign Up</button>
+            </Link>
+          </div>
+        )}
       </nav>
       <Dialog
         as="div"
@@ -180,13 +205,26 @@ export default function Navbar() {
                 </Link>
               </div>
               <div className="py-6">
-                <Link
-                  to="/login"
-                  className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  {`${token ? "Log out" : "Login"} `}
-                </Link>
+                {token ? (
+                  <Link
+                    to="/login"
+                    onClick={() => {
+                      handleLogOut();
+                      setMobileMenuOpen(false);
+                    }}
+                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                  >
+                    Log out
+                  </Link>
+                ) : (
+                  <Link
+                    to="/login"
+                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Login
+                  </Link>
+                )}
               </div>
             </div>
           </div>
