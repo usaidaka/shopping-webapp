@@ -14,30 +14,44 @@ const TopSellingProduct = () => {
     return <p></p>;
   }
   console.log(products);
-  return (
-    <Carousel>
-      {products.map((product) => (
-        <div
-          key={product.id}
-          className="grid grid-cols-4 rounded-lg drop-shadow-lg"
-        >
-          <div className="col-span-1 flex justify-center items-center rounded-lg">
-            <img src={product.image} alt="" className="h-16" />
-          </div>
-          <div className="col-span-3 text-xs rounded-lg">
-            <p className="font-bold text-gray-400">{product.category}</p>
-            <p className="font-bold text-green-strong">
-              {product.title.slice(0, 50)}...
-            </p>
-            <p>{product.description.slice(0, 75)}...</p>
 
-            <p className="bg-green-500 w-fit p-1 rounded-md mt-2 mb-2">
-              Rp. {product.price}
-            </p>
-          </div>
-        </div>
-      ))}
-    </Carousel>
+  const customTheme = {
+    root: {
+      base: "relative h-full w-full",
+      leftControl: "absolute top-0 left-0 flex h-full items-center justify-center px-4 focus:outline-none bg-white/0",
+      rightControl: "absolute top-0 right-0 flex h-full items-center justify-center px-4 focus:outline-none bg-white/0"
+    },
+    indicators: {
+      active: {
+        off: "bg-black/50 hover:bg-black/70 dark:bg-gray-800/50 dark:hover:bg-gray-800",
+        on: "bg-black"
+      },
+      base: "h-2 w-2 rounded-full",
+    },
+  }
+  return (
+    <>
+    <div className="flex justify-center mt-0 w-full h-[180px]">
+      <Carousel theme={customTheme}>
+        {products.map((product) => (
+            <div className="w-[342px] h-[85px] grid grid-cols-4 grid-rows-3 mx-auto shadow-lg rounded-md lg:w-[800px]" key={product.id}>
+                <div className="justify-center flex row-span-3 col-span-1">
+                    <img src={product.image} alt="" className="object-contain h-[85px]"></img>
+                </div>
+                <div className="col-span-3">
+                    <p className="font-bold whitespace-nowrap overflow-hidden text-ellipsis py-auto px-[10px]">{product.title}</p>
+                </div>
+                <div className="col-span-3">
+                    <p className="whitespace-nowrap overflow-hidden text-ellipsis py-auto px-[10px]">{product.description}</p>
+                </div>
+                <div className="col-span-3">
+                    <p className="font-bold py-auto text-green-400 px-[10px]">{product.price}</p>
+                </div>
+            </div>
+        ))}
+      </Carousel>
+    </div>
+    </>
   );
 };
 
