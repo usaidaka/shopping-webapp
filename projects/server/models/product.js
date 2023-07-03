@@ -9,6 +9,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Product.belongsTo(models.User, { foreignKey: "user_id" });
+      Product.belongsTo(models.Category, { foreignKey: "category_id" });
     }
   }
   Product.init(
@@ -16,7 +18,16 @@ module.exports = (sequelize, DataTypes) => {
       user_id: DataTypes.INTEGER,
       category_id: DataTypes.INTEGER,
       name_item: DataTypes.STRING,
-      image_product: DataTypes.STRING,
+      image_product: {
+        type: DataTypes.STRING,
+        get() {
+          const rawValue = this.getDataValue("imageURL");
+          if (rawValue) {
+            return `${process.env.BASEPATH}/${rawValue}`;
+          }
+          return null;
+        },
+      },
       price: DataTypes.INTEGER,
       status: DataTypes.BOOLEAN,
     },

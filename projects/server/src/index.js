@@ -7,9 +7,12 @@ const PORT = process.env.PORT || 8000;
 const app = express();
 const UserRoutes = require("./routes/user");
 const CategoryRoutes = require("./routes/category");
+const db = require("../models");
 
 app.use(cors());
 app.use(express.json());
+app.use("/photoProduct", express.static("public/product"));
+app.use("/photoProfile", express.static("public/profile"));
 
 // ----------------> #region API ROUTES <---------------------
 app.use("/api", UserRoutes);

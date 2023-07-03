@@ -7,7 +7,7 @@ import { ProductCard } from "../sub component/HomePage/ProductCard";
 
 const HomePage = () => {
   const [categories, setCategories] = useState([]);
-  const [getByCategory, setGetByCategory] = useState("")
+  const [getByCategory, setGetByCategory] = useState("");
 
   useEffect(() => {
     axios.get("https://fakestoreapi.com/products?limit=15").then((res) => {
@@ -15,14 +15,16 @@ const HomePage = () => {
     });
   }, []);
 
-  const uniqueCategories = [...new Set(categories.map((category) => category.category))]
+  const uniqueCategories = [
+    ...new Set(categories.map((category) => category.category)),
+  ];
 
   function onClickCategory(cat) {
-    setGetByCategory(cat)
+    setGetByCategory(cat);
   }
   return (
     <div className="mx-3">
-      <form className="flex gap-[10px]">
+      <form className="flex gap-2">
         <input
           type="text"
           placeholder="Search"
@@ -45,31 +47,62 @@ const HomePage = () => {
       </div>
       <div className="w-auto flex justify-center">
         <div className="flex overflow-x-auto gap-[10px] mt-[10px] mb-[20px]">
-          <button onClick={() => {onClickCategory(``)}} className="bg-green-soft text-white w-auto px-[10px] text-center rounded-[6px]">All</button>
+          <button
+            onClick={() => {
+              onClickCategory(``);
+            }}
+            className="bg-green-soft text-white w-auto px-[10px] text-center rounded-[6px]"
+          >
+            All
+          </button>
           {uniqueCategories.map((category) => (
-           <button onClick={() => {onClickCategory(`category/${category}`)}} className="flex-none bg-green-soft text-white w-auto px-[10px] text-center rounded-[6px]" key={category}>{category}</button> 
+            <button
+              onClick={() => {
+                onClickCategory(`category/${category}`);
+              }}
+              className="flex-none bg-green-soft text-white w-auto px-[10px] text-center rounded-[6px]"
+              key={category}
+            >
+              {category}
+            </button>
           ))}
         </div>
       </div>
-      <div className="flex w-[342px] gap-[10px] mx-auto mb-[20px] lg:w-auto justify-center">
+      <div className="flex w-full gap-2 mx-auto mb-[20px] lg:w-auto justify-center ">
         <div>
-            <select id="sortby" className="h-[32x] rounded-[6px] lg:w-[400px] border-green-soft">
-                <option value="">-Sort By-</option>
-                <option value="alphabet" id="alphabet">Alphabet</option>
-                <option value="price" id="price">Price</option>
-            </select>
+          <select
+            id="sortby"
+            className="h-[32x] w-24 rounded-[6px] lg:w-[400px] border-green-soft"
+          >
+            <option value="">-Sort By-</option>
+            <option value="alphabet" id="alphabet">
+              Alphabet
+            </option>
+            <option value="price" id="price">
+              Price
+            </option>
+          </select>
         </div>
         <div>
-            <select id="orderby" className="h-[32x] rounded-[6px] lg:w-[400px] border-green-soft">
-                <option value="">-Order By-</option>
-                <option value="ascending" id="ascending">Ascending</option>
-                <option value="descending" id="descending">Descending</option>
-            </select>
+          <select
+            id="orderby"
+            className="h-[32x] w-24 rounded-[6px] lg:w-[400px] border-green-soft"
+          >
+            <option value="">-Order By-</option>
+            <option value="ascending" id="ascending">
+              Ascending
+            </option>
+            <option value="descending" id="descending">
+              Descending
+            </option>
+          </select>
         </div>
-        <button className="w-[100px] bg-green-strong rounded-[6px] text-yellow-active">Go</button>
+        <button className="w-10 h-10 bg-green-strong rounded-[6px] text-yellow-active">
+          Go
+        </button>
       </div>
       <div>
-        <ProductCard category={getByCategory}/>
+        <ProductCard category={getByCategory} />
       </div>
     </div>
   );

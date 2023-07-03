@@ -7,7 +7,9 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {}
+    static associate(models) {
+      User.hasMany(models.Product, { foreignKey: "user_id" });
+    }
   }
   User.init(
     {
@@ -15,7 +17,16 @@ module.exports = (sequelize, DataTypes) => {
       email: { type: DataTypes.STRING, unique: true },
       phone: { type: DataTypes.STRING, unique: true },
       store_name: { type: DataTypes.STRING, unique: true },
-      image_profile: DataTypes.STRING,
+      image_profile: {
+        type: DataTypes.STRING,
+        get() {
+          const rawValue = this.getDataValue("imageURL");
+          if (rawValue) {
+            return `${process.env.BASEPATH}/${rawValue}`;
+          }
+          return null;
+        },
+      },
       password: DataTypes.STRING,
     },
     {
