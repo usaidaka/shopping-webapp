@@ -1,25 +1,28 @@
-import { Fragment, useState } from "react";
-import { Dialog, Disclosure, Popover, Transition } from "@headlessui/react";
+import { useState } from "react";
+import { Dialog, Popover } from "@headlessui/react";
 import {
-  ArrowPathIcon,
   Bars3Icon,
-  ChartPieIcon,
-  CursorArrowRaysIcon,
-  FingerPrintIcon,
-  SquaresPlusIcon,
   ShoppingCartIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import {
-  ChevronDownIcon,
-  PhoneIcon,
-  PlayCircleIcon,
-} from "@heroicons/react/20/solid";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
 import imageProfile from "../../assets/image_porfile_dummy.png";
-import { Link } from "react-router-dom";
+import { setTokenAccess } from "../../thunk/authSlice";
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const dispatch = useDispatch();
+  const token = useSelector((state) => state.auth.value);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogOut = () => {
+    dispatch(setTokenAccess(null));
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
 
   return (
     <header className="bg-white">
@@ -28,7 +31,7 @@ export default function Navbar() {
         aria-label="Global"
       >
         <div className="flex lg:flex-1">
-          <Link to="#" className="-m-1.5 p-1.5">
+          <Link to="/homepage" className="-m-1.5 p-1.5">
             <span className="sr-only">Your Company</span>
             <img
               className="h-8 w-auto"
@@ -47,42 +50,80 @@ export default function Navbar() {
             <Bars3Icon className="h-6 w-6" aria-hidden="true" />
           </button>
         </div>
+
         <Popover.Group className="hidden lg:flex lg:gap-x-12">
           <Link
-            to="#"
-            className="text-sm font-semibold leading-6 text-gray-900"
+            to="/homepage"
+            className={`text-sm font-semibold leading-6 ${
+              location.pathname === "/homepage"
+                ? "text-yellow-active"
+                : "text-gray-900"
+            }`}
           >
             Home
           </Link>
           <Link
-            to="#"
-            className="text-sm font-semibold leading-6 text-gray-900"
+            to="/category"
+            className={`text-sm font-semibold leading-6 ${
+              location.pathname === "/category"
+                ? "text-yellow-active"
+                : "text-gray-900"
+            }`}
           >
             Category
           </Link>
           <Link
-            to="#"
-            className="text-sm font-semibold leading-6 text-gray-900"
+            to="/cart"
+            className={`text-sm font-semibold leading-6 ${
+              location.pathname === "/cart"
+                ? "text-yellow-active"
+                : "text-gray-900"
+            }`}
           >
             Cart
           </Link>
           <Link
-            to="#"
-            className="text-sm font-semibold leading-6 text-gray-900"
+            to="/profile"
+            className={`text-sm font-semibold leading-6 ${
+              location.pathname === "/profile" ||
+              location.pathname === "/profile/my-transaction" ||
+              location.pathname === "/profile/store-transaction" ||
+              location.pathname === "/profile/sell-product" ||
+              location.pathname === "/profile/my-store" ||
+              location.pathname === "/profile/my-store/edit-category"
+                ? "text-yellow-active"
+                : "text-gray-900"
+            }`}
           >
             Profile
           </Link>
         </Popover.Group>
-        <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:gap-6">
-          <Link to="/profile">
-            <img
-              src={imageProfile}
-              alt=""
-              className="lg:w-10 lg:rounded-full"
-            />
-          </Link>
-          <ShoppingCartIcon className="lg:w-8" />
-        </div>
+        {token ? (
+          <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:gap-6">
+            <Link to="/profile">
+              <img
+                src={imageProfile}
+                alt=""
+                className="lg:w-10 lg:rounded-full"
+              />
+            </Link>
+            <Link to="/cart" className="lg:w-8">
+              <ShoppingCartIcon />
+            </Link>
+            <button className="hidden lg:block" onClick={() => handleLogOut()}>
+              Log out
+            </button>
+          </div>
+        ) : (
+          <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:gap-6">
+            <Link to="/login">
+              <button>Login</button>
+            </Link>
+            <Link to="/register">
+              <button>Sign Up</button>
+            </Link>
+          </div>
+        )}
       </nav>
       <Dialog
         as="div"
@@ -110,41 +151,80 @@ export default function Navbar() {
               <XMarkIcon className="h-6 w-6" aria-hidden="true" />
             </button>
           </div>
+
           <div className="mt-6 flow-root">
             <div className="-my-6 divide-y divide-gray-500/10">
               <div className="space-y-2 py-6">
                 <Link
-                  to="#"
-                  className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                  to="/homepage"
+                  className={`-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 ${
+                    location.pathname === "/homepage"
+                      ? "text-yellow-active"
+                      : "text-gray-900"
+                  } hover:bg-gray-50`}
+                  onClick={() => setMobileMenuOpen(false)}
                 >
                   Home
                 </Link>
                 <Link
-                  to="#"
-                  className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                  to="/category"
+                  className={`-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 ${
+                    location.pathname === "/category"
+                      ? "text-yellow-active"
+                      : "text-gray-900"
+                  } hover:bg-gray-50`}
+                  onClick={() => setMobileMenuOpen(false)}
                 >
                   Category
                 </Link>
                 <Link
-                  to="#"
-                  className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                  to="/cart"
+                  className={`-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 ${
+                    location.pathname === "/cart"
+                      ? "text-yellow-active"
+                      : "text-gray-900"
+                  } hover:bg-gray-50`}
+                  onClick={() => setMobileMenuOpen(false)}
                 >
                   Cart
                 </Link>
                 <Link
-                  to="#"
-                  className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                  to="profile"
+                  className={`-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 ${
+                    location.pathname === "/profile" ||
+                    location.pathname === "/profile/my-transaction" ||
+                    location.pathname === "/profile/store-transaction" ||
+                    location.pathname === "/profile/sell-product" ||
+                    location.pathname === "/profile/my-store"
+                      ? "text-yellow-active"
+                      : "text-gray-900"
+                  } hover:bg-gray-50`}
+                  onClick={() => setMobileMenuOpen(false)}
                 >
                   Profile
                 </Link>
               </div>
               <div className="py-6">
-                <Link
-                  to="#"
-                  className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                >
-                  Log in
-                </Link>
+                {token ? (
+                  <Link
+                    to="/login"
+                    onClick={() => {
+                      handleLogOut();
+                      setMobileMenuOpen(false);
+                    }}
+                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                  >
+                    Log out
+                  </Link>
+                ) : (
+                  <Link
+                    to="/login"
+                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Login
+                  </Link>
+                )}
               </div>
             </div>
           </div>

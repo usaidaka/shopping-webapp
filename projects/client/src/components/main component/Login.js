@@ -4,11 +4,15 @@ import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
 import axios from "../../api/axios.js";
 import loginPic from "../../assets/6310507.webp";
+import { setTokenAccess } from "../../thunk/authSlice";
 
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [errMsg, setErrMsg] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -18,7 +22,9 @@ const Login = () => {
       const response = await axios.post("/auth/login", values, {
         headers: { "Content-Type": "application/json" },
       });
-      console.log(response);
+
+      const token = response.data?.accessToken;
+      console.log(response.data?.accessToken);
       if (response.status === 200) {
         setStatus({ success: true });
         setValues({
@@ -31,6 +37,8 @@ const Login = () => {
             "Sign up successful. Please check your email for verification.",
         });
         navigate("/homepage");
+        dispatch(setTokenAccess(token));
+        localStorage.setItem("token", token);
       } else {
         throw new Error("Register Failed");
       }

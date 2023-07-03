@@ -45,7 +45,6 @@ const Register = () => {
         throw new Error("Register Failed");
       }
     } catch (err) {
-      console.log("err", err.response?.data?.message);
       if (!err.response) {
         setErrMsg("No Server Response");
       } else if (err.response?.data?.message === "username already used") {

@@ -6,12 +6,14 @@ const { join } = require("path");
 const PORT = process.env.PORT || 8000;
 const app = express();
 const UserRoutes = require("./routes/user");
+const CategoryRoutes = require("./routes/category");
 
 app.use(cors());
 app.use(express.json());
 
-//#region API ROUTES
+// ----------------> #region API ROUTES <---------------------
 app.use("/api", UserRoutes);
+app.use("/api", CategoryRoutes);
 
 // ===========================
 
