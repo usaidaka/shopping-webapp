@@ -12,8 +12,11 @@ import { useDispatch } from "react-redux";
 import { setTokenAccess } from "./thunk/authSlice";
 import { useEffect } from "react";
 import CreateProduct from "./components/main component/CreateProduct";
-import InputEditCategoryCreateProduct from "./components/sub component/Profile/create product/InputEditCategoryCreateProduct";
 import EditCategoryCreateProduct from "./components/main component/EditCategoryCreateProduct";
+import SingleProduct from "./components/main component/SingleProduct";
+import MyTransaction from "./components/main component/MyTransaction";
+import StoreTransaction from "./components/main component/StoreTransaction";
+import MyStore from "./components/main component/MyStore";
 
 function App() {
   const dispatch = useDispatch();
@@ -35,6 +38,12 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/category" element={<Category />} />
+        <Route path="/profile/my-transaction" element={<MyTransaction />} />
+        <Route
+          path="/profile/store-transaction"
+          element={<StoreTransaction />}
+        />
+        <Route path="/profile/my-store" element={<MyStore />} />
         <Route
           path="/profile/my-store/edit-category"
           element={<EditCategory />}
@@ -44,13 +53,11 @@ function App() {
           element={<EditCategoryCreateProduct />}
         />
         <Route
-          path="/profile/my-store/edit-product"
+          path="/profile/my-store/edit-product/:id"
           element={<EditProduct />}
         />
-        <Route
-          path="/profile/my-store/create-product"
-          element={<CreateProduct />}
-        />
+        <Route path="/profile/sell-product" element={<CreateProduct />} />
+        <Route path="/products/:id" element={<SingleProduct />} />
       </Routes>
       <FooterMobile />
       <FooterDesktop />

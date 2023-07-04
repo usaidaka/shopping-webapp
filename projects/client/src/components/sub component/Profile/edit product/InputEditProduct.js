@@ -14,7 +14,6 @@ const InputEditProduct = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [errMsg, setErrMsg] = useState("");
   const [price, setPrice] = useState("");
-  const [toggleValue, setToggleValue] = useState(false);
   const [image, setImage] = useState("");
   const token = useSelector((state) => state.auth.value);
   const { id } = useParams();
@@ -24,46 +23,37 @@ const InputEditProduct = () => {
       .get("profile/my-store/category")
       .then((res) => setCategories(res.data.result));
   }, []);
-  //   console.log(categories);
 
   /* formik yup untuk handle value dari input */
   const EditProduct = async (values, { setStatus, setValues }) => {
     const formData = new FormData();
+
+    values.price = Number(price);
+
     formData.append("data", JSON.stringify(values));
     formData.append("file", image[0]);
 
     try {
-      axios
-        .post("/profile/my-store/create-product", formData, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((res) => {
-          console.log(res);
-          // setStatus({ success: true });
-          // setValues({
-          //   name_item: "",
-          //   category_id: selectedCategory,
-          //   product_description: "",
-          //   price: "",
-          //   status: false,
-          // });
-          // setSelectedCategory("select a category");
-          // setErrMsg(null);
-        });
+      axios.patch(`/profile/my-store/edit-product/${id}`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setValues({
+        name_item: "",
+        category_id: "",
+        product_description: "",
+        price: "",
+        status: false,
+      });
+      setSelectedCategory("");
+      setPrice("");
     } catch (err) {
       console.log(err);
       if (!err.response) {
         setErrMsg("No Server Response");
-      } else if (err.response?.status === 409) {
-        setErrMsg(
-          "indicates a request conflict with the current state of the target resource"
-        );
-      } else if (err.response?.status === 400) {
-        setErrMsg("Bad Request");
       } else {
-        setErrMsg("Registration failed");
+        setErrMsg("fatal error");
       }
     }
   };
@@ -73,8 +63,8 @@ const InputEditProduct = () => {
       name_item: "",
       category_id: selectedCategory,
       product_description: "",
-      price: "",
-      status: toggleValue,
+      price: 0,
+      status: false,
     },
     onSubmit: EditProduct,
     validationSchema: yup.object().shape({
@@ -97,10 +87,6 @@ const InputEditProduct = () => {
     setPrice(value);
   };
 
-  const handleToggle = () => {
-    setToggleValue(!toggleValue);
-  };
-
   const handleFile = (e) => {
     const files = e.target.files;
 
@@ -118,16 +104,7 @@ const InputEditProduct = () => {
           <h1 className="text-xl mb-2">Edit Product</h1>
         </div>
         {/* card */}
-        <div className="w-full h-20 border-2 ">
-          <div>
-            <div>
-              <img src="" alt="" />
-            </div>
-            <div>
-              <h1>Polo Shirt</h1>
-            </div>
-          </div>
-        </div>
+        {/* card diganti dengan meletakkan value product di dalam form input saat akan di edit */}
         {errMsg ? (
           <div className="w-full bg-red-200 text-red-700 h-10 flex justify-center items-center mt-2 lg:w-full rounded-xl">
             <p className="bg-inherit">{errMsg}</p>
@@ -237,12 +214,14 @@ const InputEditProduct = () => {
             <input
               type="checkbox"
               className="sr-only peer"
-              checked={toggleValue}
-              onChange={handleToggle}
+              checked={formik.values.status}
+              onChange={() => {
+                formik.setFieldValue("status", !formik.values.status);
+              }}
             />
             <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
             <span className="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">
-              {toggleValue ? "active" : "deactivate"}
+              {formik.values.status ? "active" : "deactivate"}
             </span>
           </label>
           <FormControl

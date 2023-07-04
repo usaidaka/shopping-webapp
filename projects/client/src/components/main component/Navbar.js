@@ -80,7 +80,7 @@ export default function Navbar() {
             Cart
           </Link>
           <Link
-            to="/profile"
+            to="/profile/my-transaction"
             className={`text-sm font-semibold leading-6 ${
               location.pathname === "/profile" ||
               location.pathname === "/profile/my-transaction" ||
@@ -97,7 +97,7 @@ export default function Navbar() {
         </Popover.Group>
         {token ? (
           <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:gap-6">
-            <Link to="/profile">
+            <Link to="/profile/my-transaction">
               <img
                 src={imageProfile}
                 alt=""
@@ -182,7 +182,7 @@ export default function Navbar() {
                   Cart
                 </Link>
                 <Link
-                  to="profile"
+                  to="/profile/my-transaction"
                   className={`-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 ${
                     location.pathname === "/profile" ||
                     location.pathname === "/profile/my-transaction" ||

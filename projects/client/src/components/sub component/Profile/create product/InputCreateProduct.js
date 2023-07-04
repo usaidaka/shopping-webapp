@@ -15,35 +15,48 @@ const InputCreateProduct = () => {
   const [errMsg, setErrMsg] = useState("");
   const [price, setPrice] = useState("");
   const [image, setImage] = useState("");
-  const [toggleValue, setToggleValue] = useState(false);
-  const token = useSelector((state)=> state.auth.value)
+  const [isSuccess, setIsSuccess] = useState(false);
+  const token = useSelector((state) => state.auth.value);
 
   useEffect(() => {
     axios
       .get("profile/my-store/category")
       .then((res) => setCategories(res.data.result));
   }, []);
-  //   console.log(categories);
 
   /* formik yup untuk handle value dari input */
   const createProduct = async (values, { setStatus, setValues }) => {
-    const formData = new FormData()
-    formData.append("data", JSON.stringify(values))
-    formData.append("file", image[0])
+    const formData = new FormData();
+
+    values.price = Number(price);
+
+    formData.append("data", JSON.stringify(values));
+    formData.append("file", image[0]);
     try {
-      axios.post("/profile/my-store/create-product", formData, {headers : {Authorization : `Bearer ${token}`}})
+      axios.post("/profile/my-store/create-product", formData, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setValues({
-      name_item: "",
-      category_id: "",
-      product_description: "",
-      price: "",
-      status: false,
-      })
-      setSelectedCategory("")
-      setPrice("")
-      setToggleValue(false)
+        name_item: "",
+        category_id: "",
+        product_description: "",
+        price: "",
+        status: false,
+      });
+      setSelectedCategory("");
+      setPrice("");
+      setIsSuccess(true);
     } catch (error) {
-      console.log(error)
+      console.log(error);
+      if (!error.response) {
+        setErrMsg("No Server Response");
+      } else if (error.response?.data?.message === "data not found") {
+        setErrMsg("data not found");
+      } else if (error.response?.data?.message === "user not found") {
+        setErrMsg("user not found");
+      } else {
+        setErrMsg("fatal error");
+      }
     }
   };
 
@@ -52,8 +65,8 @@ const InputCreateProduct = () => {
       name_item: "",
       category_id: selectedCategory,
       product_description: "",
-      price: price,
-      status: toggleValue,
+      price: "",
+      status: false,
     },
     onSubmit: createProduct,
     validationSchema: yup.object().shape({
@@ -76,10 +89,6 @@ const InputCreateProduct = () => {
     setPrice(value);
   };
 
-  const handleToggle = () => {
-    setToggleValue(!toggleValue);
-  };
-
   const handleFile = (e) => {
     const files = e.target.files;
 
@@ -96,7 +105,11 @@ const InputCreateProduct = () => {
         <div>
           <h1 className="text-xl mb-2">Create Product</h1>
         </div>
-        
+        {isSuccess ? (
+          <div className="w-full bg-blue-200 text-blue-700 h-10 flex justify-center items-center mt-2 lg:w-full rounded-xl">
+            <p className="bg-inherit">Product successfully uploaded</p>
+          </div>
+        ) : null}
         {errMsg ? (
           <div className="w-full bg-red-200 text-red-700 h-10 flex justify-center items-center mt-2 lg:w-full rounded-xl">
             <p className="bg-inherit">{errMsg}</p>
@@ -195,6 +208,7 @@ const InputCreateProduct = () => {
               decimalScale={0}
               onValueChange={(values) => {
                 formik.setFieldValue("price", values.value);
+
                 handleChange(values.value);
               }}
             />
@@ -206,14 +220,17 @@ const InputCreateProduct = () => {
             <input
               type="checkbox"
               className="sr-only peer"
-              checked={toggleValue}
-              onChange={handleToggle}
+              checked={formik.values.status}
+              onChange={() => {
+                formik.setFieldValue("status", !formik.values.status);
+              }}
             />
             <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
             <span className="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">
-              {toggleValue ? "active" : "deactivate"}
+              {formik.values.status ? "active" : "deactivate"}
             </span>
           </label>
+
           <FormControl
             className="flex flex-col"
             isInvalid={formik.errors.photo}
@@ -225,7 +242,7 @@ const InputCreateProduct = () => {
               onChange={handleFile}
               type="file"
               name="photo"
-              className="py-1 px-2 rounded-full border-2 w-fit"
+              className="py-1 px-2 rounded-full lg:w-fit"
               autoComplete="off"
               accept="image/png, image/gif, image/jpeg"
             />

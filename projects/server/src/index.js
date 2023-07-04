@@ -12,7 +12,7 @@ const db = require("../models");
 
 app.use(cors());
 app.use(express.json());
-app.use("/photoProduct", express.static("public/product"));
+app.use("/photo-product", express.static("public/product"));
 app.use("/photoProfile", express.static("public/profile"));
 
 // ----------------> #region API ROUTES <---------------------

@@ -71,7 +71,7 @@ const FooterMobile = () => {
         >
           {/* nanti di rapihin ke /profile */}
           <Link
-            to="/profile/my-store/edit-category"
+            to="/profile/my-transaction"
             className="bg-inherit flex flex-col justify-center items-center"
           >
             <UserIcon className="w-6 mt-1 bg-inherit" />

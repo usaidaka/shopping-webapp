@@ -59,7 +59,7 @@ const InputEditCategoryCreateProduct = () => {
             .then((res) => setCategories(res.data.result));
           setSelectedCategory("select a category");
           setErrMsg(null);
-          navigate("/profile/my-store/edit-product");
+          navigate("/profile/my-store/create-product");
         } else {
           setSelectedCategory("select a category");
           throw new Error("Change category failed");
