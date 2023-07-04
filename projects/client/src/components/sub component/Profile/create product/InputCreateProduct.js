@@ -5,6 +5,7 @@ import * as yup from "yup";
 import { FormControl, FormErrorMessage } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { NumericFormat } from "react-number-format";
+import { useSelector } from "react-redux";
 
 //bagaimana nge set token agar saat di middleware db dapat terbaca/tervalidasi
 
@@ -13,7 +14,9 @@ const InputCreateProduct = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [errMsg, setErrMsg] = useState("");
   const [price, setPrice] = useState("");
+  const [image, setImage] = useState("");
   const [toggleValue, setToggleValue] = useState(false);
+  const token = useSelector((state)=> state.auth.value)
 
   useEffect(() => {
     axios
@@ -28,11 +31,19 @@ const InputCreateProduct = () => {
     formData.append("data", JSON.stringify(values))
     formData.append("file", image[0])
     try {
-      axios.post("/profile/my-store/create-product", formData, {headers:{
-        Authorization: `Bearer ${token}`
-      }})
+      axios.post("/profile/my-store/create-product", formData, {headers : {Authorization : `Bearer ${token}`}})
+      setValues({
+      name_item: "",
+      category_id: "",
+      product_description: "",
+      price: "",
+      status: false,
+      })
+      setSelectedCategory("")
+      setPrice("")
+      setToggleValue(false)
     } catch (error) {
-      
+      console.log(error)
     }
   };
 
@@ -67,6 +78,12 @@ const InputCreateProduct = () => {
 
   const handleToggle = () => {
     setToggleValue(!toggleValue);
+  };
+
+  const handleFile = (e) => {
+    const files = e.target.files;
+
+    setImage([...files]);
   };
 
   if (categories.length === 0) {
@@ -138,11 +155,11 @@ const InputCreateProduct = () => {
             </div>
             <div>
               <Link
-                to="/profile/my-store/edit-category"
+                to="/profile/my-store/edit-create-category"
                 className="flex flex-col justify-center items-center mb-2"
               >
                 <button className="text-xs w-fit h-10 bg-green-button px-2 py-1 rounded-md text-white mt-2 text-center lg:text-base ">
-                  edit category
+                  Edit Category
                 </button>
               </Link>
             </div>
@@ -197,11 +214,30 @@ const InputCreateProduct = () => {
               {toggleValue ? "active" : "deactivate"}
             </span>
           </label>
+          <FormControl
+            className="flex flex-col"
+            isInvalid={formik.errors.photo}
+          >
+            <label className="block text-sm font-medium text-gray-900 dark:text-white">
+              photo product
+            </label>
+            <input
+              onChange={handleFile}
+              type="file"
+              name="photo"
+              className="py-1 px-2 rounded-full border-2 w-fit"
+              autoComplete="off"
+              accept="image/png, image/gif, image/jpeg"
+            />
+            <FormErrorMessage className="text-red-500 text-sm font-medium">
+              {formik.errors.photo}
+            </FormErrorMessage>
+          </FormControl>
           <button
             className="w-fit bg-green-button px-2 py-1 rounded-md text-white mt-2 text-center"
             type="submit"
           >
-            Edit Product
+            Add Product
           </button>
         </form>
       </main>
