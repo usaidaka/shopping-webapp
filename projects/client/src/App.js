@@ -36,7 +36,7 @@ function App() {
           element={<EditCategory />}
         />
         <Route
-          path="/profile/my-store/edit-product"
+          path="/profile/my-store/edit-product/:id"
           element={<EditProduct />}
         />
       </Routes>

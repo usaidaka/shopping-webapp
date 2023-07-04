@@ -3,7 +3,7 @@ import axios from "../../../../api/axios";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { FormControl, FormErrorMessage } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { NumericFormat } from "react-number-format";
 import { useSelector } from "react-redux";
 
@@ -17,6 +17,7 @@ const InputEditProduct = () => {
   const [toggleValue, setToggleValue] = useState(false);
   const [image, setImage] = useState("");
   const token = useSelector((state) => state.auth.value);
+  const { id } = useParams();
 
   useEffect(() => {
     axios

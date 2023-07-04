@@ -3,8 +3,8 @@ const productController = require("../controller/product");
 const verifyToken = require("../middleware/verifyToken");
 const upload = require("../middleware/multerProduct");
 
-routerProduct.post(
-  "/profile/my-store/create-product",
+routerProduct.patch(
+  "/profile/my-store/edit-product/:id",
   verifyToken,
   upload.single("file"),
   productController.editProduct
