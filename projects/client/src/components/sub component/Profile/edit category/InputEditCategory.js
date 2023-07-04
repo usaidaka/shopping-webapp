@@ -3,13 +3,13 @@ import axios from "../../../../api/axios";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { FormControl, FormErrorMessage } from "@chakra-ui/react";
-
-// bagaimana cara agar ketika user selesai submit change category, pada drop down menu langsung mengembalikan valuenya ke value paling atas (choose a category)
+import { Link, useNavigate } from "react-router-dom";
 
 const InputEditCategory = () => {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [errMsg, setErrMsg] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -20,34 +20,56 @@ const InputEditCategory = () => {
   /* formik yup untuk handle value dari input */
   const editCategory = async (values, { setStatus, setValues }) => {
     try {
-      const response = await axios.patch(
-        `profile/my-store/category/${selectedCategory}`,
-        {
+      if (selectedCategory === "add") {
+        const responseAdd = await axios.post(`profile/my-store/category`, {
           category_name: values.category_name,
-        }
-      );
-
-      if (response.status === 201) {
-        setStatus({ success: true });
-        setValues({
-          category_name: "",
         });
-        axios
-          .get("/profile/my-store/category")
-          .then((res) => setCategories(res.data.result));
-        setSelectedCategory("select a category");
-        setErrMsg(null);
-      } else {
-        setSelectedCategory("select a category");
-        throw new Error("Change category failed");
+        console.log(values.category_name);
+        if (responseAdd.status === 201) {
+          setStatus({ success: true });
+          setValues({
+            category_name: "",
+          });
+          axios
+            .get("/profile/my-store/category")
+            .then((res) => setCategories(res.data.result));
+          setSelectedCategory("select a category");
+          setErrMsg(null);
+          navigate("/profile/my-store/edit-product");
+        } else {
+          setSelectedCategory("select a category");
+          throw new Error("Change category failed");
+        }
+      }
+      if (selectedCategory !== "add") {
+        const response = await axios.patch(
+          `profile/my-store/category/${selectedCategory}`,
+          {
+            category_name: values.category_name,
+          }
+        );
+
+        if (response.status === 201) {
+          setStatus({ success: true });
+          setValues({
+            category_name: "",
+          });
+          axios
+            .get("/profile/my-store/category")
+            .then((res) => setCategories(res.data.result));
+          setSelectedCategory("select a category");
+          setErrMsg(null);
+          navigate("/profile/my-store/edit-product");
+        } else {
+          setSelectedCategory("select a category");
+          throw new Error("Change category failed");
+        }
       }
     } catch (error) {
       console.log(error);
-
       setValues({
         category_name: "",
       });
-
       if (!error.response) {
         setSelectedCategory("select a category");
         setErrMsg("No Server Response");
@@ -130,6 +152,7 @@ const InputEditCategory = () => {
                 {category.category_name}
               </option>
             ))}
+            <option value={"add"}>add new category</option>
           </select>
           <label className="block text-sm font-medium text-gray-900 dark:text-white">
             new category

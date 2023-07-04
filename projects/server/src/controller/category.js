@@ -38,6 +38,39 @@ const editCategory = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
+    res.status(500).json({
+      ok: false,
+      message: "Fatal Error",
+    });
+  }
+};
+
+const addCategory = async (req, res) => {
+  const { category_name } = req.body;
+  try {
+    const isCategoryExist = await Category.findOne({
+      where: { category_name: category_name },
+    });
+
+    if (isCategoryExist) {
+      return res.status(400).json({
+        ok: false,
+        message: "category already exist, please choose one",
+      });
+    }
+
+    const postCategory = await Category.create({
+      category_name: category_name,
+    });
+    res.status(201).json({
+      data: postCategory,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      ok: false,
+      message: "Fatal Error",
+    });
   }
 };
 
@@ -57,4 +90,4 @@ const getCategory = async (req, res) => {
   }
 };
 
-module.exports = { editCategory, getCategory };
+module.exports = { editCategory, getCategory, addCategory };

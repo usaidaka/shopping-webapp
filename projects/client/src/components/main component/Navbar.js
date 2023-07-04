@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import imageProfile from "../../assets/image_porfile_dummy.png";
 import { setTokenAccess } from "../../thunk/authSlice";
+import tokokita from "../../assets/tokokita.png";
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -33,11 +34,7 @@ export default function Navbar() {
         <div className="flex lg:flex-1">
           <Link to="/homepage" className="-m-1.5 p-1.5">
             <span className="sr-only">Your Company</span>
-            <img
-              className="h-8 w-auto"
-              src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-              alt=""
-            />
+            <img className="h-9 lg:h-12 w-auto" src={tokokita} alt="" />
           </Link>
         </div>
         <div className="flex lg:hidden">
@@ -136,11 +133,7 @@ export default function Navbar() {
           <div className="flex items-center justify-between">
             <Link to="#" className="-m-1.5 p-1.5">
               <span className="sr-only">Your Company</span>
-              <img
-                className="h-8 w-auto"
-                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                alt=""
-              />
+              <img className="h-9 w-auto" src={tokokita} alt="" />
             </Link>
             <button
               type="button"

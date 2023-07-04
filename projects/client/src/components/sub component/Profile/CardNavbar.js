@@ -53,11 +53,15 @@ const CardNavbarEditCategory = () => {
           <Link
             to="/profile/my-store"
             className={`row-span-1 ${
-              location.pathname === "/profile/my-store"
+              location.pathname === "/profile/my-store" ||
+              location.pathname === "/profile/my-store/edit-category" ||
+              location.pathname === "/profile/my-store/edit-product"
                 ? "bg-green-strong"
                 : "bg-green-soft"
             } ${
-              location.pathname === "/profile/my-store"
+              location.pathname === "/profile/my-store" ||
+              location.pathname === "/profile/my-store/edit-category" ||
+              location.pathname === "/profile/my-store/edit-product"
                 ? "text-yellow-active"
                 : "text-white"
             }   mx-2 flex flex-col justify-center items-center rounded-md`}

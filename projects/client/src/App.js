@@ -7,6 +7,7 @@ import FooterMobile from "./components/main component/FooterMobile";
 import EditCategory from "./components/main component/EditCategory";
 import Category from "./components/main component/Category";
 import FooterDesktop from "./components/main component/FooterDesktop";
+import EditProduct from "./components/main component/EditProduct";
 
 function App() {
   return (
@@ -17,10 +18,13 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/category" element={<Category />} />
-
         <Route
           path="/profile/my-store/edit-category"
           element={<EditCategory />}
+        />
+        <Route
+          path="/profile/my-store/edit-product"
+          element={<EditProduct />}
         />
       </Routes>
       <FooterMobile />

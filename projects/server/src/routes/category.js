@@ -15,4 +15,9 @@ routerCategory.get(
   categoryController.getCategory
 );
 
+routerCategory.post(
+  "/profile/my-store/category",
+  categoryController.addCategory
+);
+
 module.exports = routerCategory;

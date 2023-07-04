@@ -63,7 +63,8 @@ const FooterMobile = () => {
             location.pathname === "/profile/store-transaction" ||
             location.pathname === "/profile/sell-product" ||
             location.pathname === "/profile/my-store" ||
-            location.pathname === "/profile/my-store/edit-category"
+            location.pathname === "/profile/my-store/edit-category" ||
+            location.pathname === "/profile/my-store/edit-product"
               ? "text-yellow-active"
               : "text-white"
           } col-span-1`}

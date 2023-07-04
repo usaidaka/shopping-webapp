@@ -23,21 +23,23 @@ const HomePage = () => {
     setGetByCategory(cat);
   }
   return (
-    <div className="mx-3">
-      <form className="flex gap-2">
+    <div className="mx-3 ">
+      <form className="flex lg:justify-center gap-2">
         <input
           type="text"
           placeholder="Search"
-          className="border-1 w-full rounded-md border-green-soft"
+          className="border-1 w-full rounded-md border-green-soft lg:w-1/2"
         />
         <button className="bg-green-strong h-[44px] w-[44px] rounded-md flex justify-center items-center">
           <MagnifyingGlassIcon className="text-yellow-active bg-inherit w-4" />
         </button>
       </form>
       <header>
-        <div className="flex justify-between items-end mt-2">
-          <h1 className="text-md font-bold">Top Selling Product</h1>
-          <Link to="" className="text-sm">
+        <div className="flex justify-between items-end mt-2 lg:grid lg:grid-cols-2">
+          <h1 className="text-md font-bold lg:text-center">
+            Top Selling Product
+          </h1>
+          <Link to="" className="text-sm lg:text-center">
             See All
           </Link>
         </div>

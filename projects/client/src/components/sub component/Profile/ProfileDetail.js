@@ -1,5 +1,5 @@
 import React from "react";
-import ppDummy from "../../../../assets/image_porfile_dummy.png";
+import ppDummy from "../../../assets/image_porfile_dummy.png";
 
 const ProfileDetail = () => {
   return (

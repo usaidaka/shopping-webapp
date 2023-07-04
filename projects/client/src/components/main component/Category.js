@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 
 const Category = () => {
   return (
-    <div className="mx-3">
+    <div className="mx-3 ">
       <form className="flex gap-2">
         <input
           type="text"
