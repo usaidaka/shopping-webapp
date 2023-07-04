@@ -30,6 +30,7 @@ module.exports = (sequelize, DataTypes) => {
           return null;
         },
       },
+      product_description: DataTypes.STRING,
       price: DataTypes.INTEGER,
       status: DataTypes.BOOLEAN,
     },

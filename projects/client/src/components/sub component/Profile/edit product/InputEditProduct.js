@@ -5,6 +5,7 @@ import * as yup from "yup";
 import { FormControl, FormErrorMessage } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { NumericFormat } from "react-number-format";
+import { useSelector } from "react-redux";
 
 //bagaimana nge set token agar saat di middleware db dapat terbaca/tervalidasi
 
@@ -14,6 +15,8 @@ const InputEditProduct = () => {
   const [errMsg, setErrMsg] = useState("");
   const [price, setPrice] = useState("");
   const [toggleValue, setToggleValue] = useState(false);
+  const [image, setImage] = useState("");
+  const token = useSelector((state) => state.auth.value);
 
   useEffect(() => {
     axios
@@ -23,14 +26,53 @@ const InputEditProduct = () => {
   //   console.log(categories);
 
   /* formik yup untuk handle value dari input */
-  const EditProduct = async (values, { setStatus, setValues }) => {};
+  const EditProduct = async (values, { setStatus, setValues }) => {
+    const formData = new FormData();
+    formData.append("data", JSON.stringify(values));
+    formData.append("file", image[0]);
+
+    try {
+      axios
+        .post("/profile/my-store/create-product", formData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => {
+          console.log(res);
+          // setStatus({ success: true });
+          // setValues({
+          //   name_item: "",
+          //   category_id: selectedCategory,
+          //   product_description: "",
+          //   price: "",
+          //   status: false,
+          // });
+          // setSelectedCategory("select a category");
+          // setErrMsg(null);
+        });
+    } catch (err) {
+      console.log(err);
+      if (!err.response) {
+        setErrMsg("No Server Response");
+      } else if (err.response?.status === 409) {
+        setErrMsg(
+          "indicates a request conflict with the current state of the target resource"
+        );
+      } else if (err.response?.status === 400) {
+        setErrMsg("Bad Request");
+      } else {
+        setErrMsg("Registration failed");
+      }
+    }
+  };
 
   const formik = useFormik({
     initialValues: {
       name_item: "",
       category_id: selectedCategory,
       product_description: "",
-      price: price,
+      price: "",
       status: toggleValue,
     },
     onSubmit: EditProduct,
@@ -56,6 +98,12 @@ const InputEditProduct = () => {
 
   const handleToggle = () => {
     setToggleValue(!toggleValue);
+  };
+
+  const handleFile = (e) => {
+    const files = e.target.files;
+
+    setImage([...files]);
   };
 
   if (categories.length === 0) {
@@ -196,6 +244,25 @@ const InputEditProduct = () => {
               {toggleValue ? "active" : "deactivate"}
             </span>
           </label>
+          <FormControl
+            className="flex flex-col"
+            isInvalid={formik.errors.photo}
+          >
+            <label className="block text-sm font-medium text-gray-900 dark:text-white">
+              photo product
+            </label>
+            <input
+              onChange={handleFile}
+              type="file"
+              name="photo"
+              className="py-1 px-2 rounded-full border-2 w-fit"
+              autoComplete="off"
+              accept="image/png, image/gif, image/jpeg"
+            />
+            <FormErrorMessage className="text-red-500 text-sm font-medium">
+              {formik.errors.photo}
+            </FormErrorMessage>
+          </FormControl>
           <button
             className="w-fit bg-green-button px-2 py-1 rounded-md text-white mt-2 text-center"
             type="submit"

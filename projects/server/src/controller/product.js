@@ -4,15 +4,12 @@ const { Product } = require("../../models");
 // bikin file upload (multer utk upload photo product, nnt di enhance lg bisa nge crop supaya square)
 
 const editProduct = async (req, res) => {
-  //   const user_id = req.user.userId;
-  //   console.log(user_id);
-  const { name_item, category_id, product_description, price, status } =
-    req.body;
-  console.log("item", name_item);
-  console.log("cat", category_id);
-  console.log("desc", product_description);
-  console.log("price", price);
-  console.log("status", status);
+  const user_id = req.user.userId;
+  console.log(user_id);
+  const data = JSON.parse(req.body.data);
+  const imageURL = req.file.filename;
+  console.log(data);
+  console.log(imageURL);
   try {
     // const postProduct = await Product.create({});
   } catch (error) {}

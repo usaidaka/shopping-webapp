@@ -5,7 +5,7 @@ const upload = require("../middleware/multerProduct");
 
 routerProduct.post(
   "/profile/my-store/create-product",
-  //   verifyToken,
+  verifyToken,
   upload.single("file"),
   productController.editProduct
 );
