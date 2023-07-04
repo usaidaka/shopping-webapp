@@ -8,9 +8,21 @@ import EditCategory from "./components/main component/EditCategory";
 import Category from "./components/main component/Category";
 import FooterDesktop from "./components/main component/FooterDesktop";
 import EditProduct from "./components/main component/EditProduct";
-import CreateProduct from "./components/main component/CreateProduct";
+import { useDispatch } from "react-redux";
+import { setTokenAccess } from "./thunk/authSlice";
+import { useEffect } from "react";
 
 function App() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    // check localstorage
+    // dispatch token from localstorage to redux state
+    const token = localStorage.getItem("token");
+    if (token) {
+      dispatch(setTokenAccess(token));
+    }
+  }, []);
+
   return (
     <Router>
       <Navbar />
