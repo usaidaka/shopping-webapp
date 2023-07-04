@@ -20,10 +20,11 @@ module.exports = (sequelize, DataTypes) => {
       user_id: DataTypes.INTEGER,
       category_id: DataTypes.INTEGER,
       name_item: DataTypes.STRING,
+      product_description: DataTypes.STRING,
       image_product: {
         type: DataTypes.STRING,
         get() {
-          const rawValue = this.getDataValue("imageURL");
+          const rawValue = this.getDataValue("image_product");
           if (rawValue) {
             return `${process.env.BASEPATH}/${rawValue}`;
           }

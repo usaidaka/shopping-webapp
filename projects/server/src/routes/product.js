@@ -7,7 +7,11 @@ routerProduct.patch(
   "/profile/my-store/edit-product/:id",
   verifyToken,
   upload.single("file"),
-  productController.editProduct
+  productController.createProduct
 );
+
+routerProduct.get(
+  "/products", productController.getProducts
+)
 
 module.exports = routerProduct;

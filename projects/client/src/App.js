@@ -11,6 +11,9 @@ import EditProduct from "./components/main component/EditProduct";
 import { useDispatch } from "react-redux";
 import { setTokenAccess } from "./thunk/authSlice";
 import { useEffect } from "react";
+import CreateProduct from "./components/main component/CreateProduct";
+import InputEditCategoryCreateProduct from "./components/sub component/Profile/create product/InputEditCategoryCreateProduct";
+import EditCategoryCreateProduct from "./components/main component/EditCategoryCreateProduct";
 
 function App() {
   const dispatch = useDispatch();
@@ -27,6 +30,7 @@ function App() {
     <Router>
       <Navbar />
       <Routes>
+        <Route path="/" element={<HomePage />} />
         <Route path="/homepage" element={<HomePage />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
@@ -36,8 +40,16 @@ function App() {
           element={<EditCategory />}
         />
         <Route
-          path="/profile/my-store/edit-product/:id"
+          path="/profile/my-store/edit-create-category"
+          element={<EditCategoryCreateProduct />}
+        />
+        <Route
+          path="/profile/my-store/edit-product"
           element={<EditProduct />}
+        />
+        <Route
+          path="/profile/my-store/create-product"
+          element={<CreateProduct />}
         />
       </Routes>
       <FooterMobile />
