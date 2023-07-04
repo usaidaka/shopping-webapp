@@ -10,4 +10,8 @@ routerProduct.post(
   productController.createProduct
 );
 
+routerProduct.get(
+  "/products", productController.getProducts
+)
+
 module.exports = routerProduct;

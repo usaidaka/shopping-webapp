@@ -1,4 +1,5 @@
-const { Product, User } = require("../../models");
+const { Product, User, Category } = require("../../models");
+const db = require("../../models")
 
 //body sudah masuk sesuai inputan,
 // bikin file upload (multer utk upload photo product, nnt di enhance lg bisa nge crop supaya square)
@@ -16,8 +17,11 @@ const editProduct = async (req, res) => {
 };
 
 const createProduct = async (req, res) => {
+  const data = JSON.parse(req.body.data)
+  console.log(data)
+  const imageURL = req.file.filename
+      console.log(imageURL)
   try {
-      const data = JSON.parse(req.body.data)
 
       // if(!data) {
       //     return res.status(400).send({
@@ -25,30 +29,29 @@ const createProduct = async (req, res) => {
       //     })
       // }
 
-      // const userData = await User.findOne({
-      //     where: {
-      //         username: req.user.username,
-      //         email: req.user.email
-      //     }
-      // })
+      const userData = await User.findOne({
+          where: {
+              username: req.user.username,
+              email: req.user.email
+          }
+      })
 
-      // if(!userData){
-      //     return res.status(400).send({
-      //         message: "user not found"
-      //     })
-      // }
+      if(!userData){
+          return res.status(400).send({
+              message: "user not found"
+          })
+      }
 
       //bisa bikin error handling untuk ngecek apakah category yang di input user exist
-      const imageURL = req.file.filename
-      console.log(imageURL)
+      
 
       const result = await Product.create({
-          // user_id: userData.id,
-          category_id: data.category_id,
+          user_id: userData.id,
+          category_id: Number(data.category_id),
           name_item: data.name_item,
           product_description: data.product_description,
           image_product: `/static/${imageURL}`,
-          price: data.price,
+          price: Number(data.price),
           status: data.status
       })
 
@@ -57,8 +60,10 @@ const createProduct = async (req, res) => {
           data: result
       })
   } catch (error) {
+    const data = JSON.parse(req.body.data)
+  console.log(data)
       res.status(500).send({
-          message: "server error",
+          message: "server error hahahaha",
           error: error.message
       })
   }
@@ -92,10 +97,10 @@ const getProducts = async (req, res) => {
           order.push([sort, pagination.sortBy[sort]])
       }
 
-      const result = await db.Product.findAll({
+      const result = await Product.findAll({
           include: [
               {
-                  model: db.Category,
+                  model: Category,
                   attributes: ["category_name"]
               }
           ],
@@ -105,7 +110,7 @@ const getProducts = async (req, res) => {
           order
       })
 
-      const totalProduct = await db.Product.count({where})
+      const totalProduct = await Product.count({where})
 
       res.status(200).send({
           message: "success get products",
