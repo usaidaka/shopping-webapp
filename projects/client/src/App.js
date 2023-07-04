@@ -8,6 +8,7 @@ import EditCategory from "./components/main component/EditCategory";
 import Category from "./components/main component/Category";
 import FooterDesktop from "./components/main component/FooterDesktop";
 import EditProduct from "./components/main component/EditProduct";
+import CreateProduct from "./components/main component/CreateProduct";
 
 function App() {
   return (
@@ -25,6 +26,10 @@ function App() {
         <Route
           path="/profile/my-store/edit-product"
           element={<EditProduct />}
+        />
+        <Route
+          path="/profile/my-store/create-product"
+          element={<CreateProduct />}
         />
       </Routes>
       <FooterMobile />

@@ -7,7 +7,7 @@ routerProduct.post(
   "/profile/my-store/create-product",
   //   verifyToken,
   upload.single("file"),
-  productController.editProduct
+  productController.createProduct
 );
 
 module.exports = routerProduct;
