@@ -49,7 +49,7 @@ const FooterMobile = () => {
           } col-span-1`}
         >
           <Link
-            to=""
+            to="/cart"
             className="bg-inherit flex flex-col justify-center items-center"
           >
             <ListBulletIcon className="w-6 mt-1 bg-inherit" />

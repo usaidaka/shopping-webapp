@@ -17,6 +17,7 @@ import SingleProduct from "./components/main component/SingleProduct";
 import MyTransaction from "./components/main component/MyTransaction";
 import StoreTransaction from "./components/main component/StoreTransaction";
 import MyStore from "./components/main component/MyStore";
+import Cart from "./components/sub component/Cart/DetailCart";
 
 function App() {
   const dispatch = useDispatch();
@@ -32,33 +33,36 @@ function App() {
   return (
     <Router>
       <Navbar />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/homepage" element={<HomePage />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/category" element={<Category />} />
-        <Route path="/profile/my-transaction" element={<MyTransaction />} />
-        <Route
-          path="/profile/store-transaction"
-          element={<StoreTransaction />}
-        />
-        <Route path="/profile/my-store" element={<MyStore />} />
-        <Route
-          path="/profile/my-store/edit-category"
-          element={<EditCategory />}
-        />
-        <Route
-          path="/profile/my-store/edit-create-category"
-          element={<EditCategoryCreateProduct />}
-        />
-        <Route
-          path="/profile/my-store/edit-product/:id"
-          element={<EditProduct />}
-        />
-        <Route path="/profile/sell-product" element={<CreateProduct />} />
-        <Route path="/products/:id" element={<SingleProduct />} />
-      </Routes>
+      <div className="lg:min-h-[59vh]">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/homepage" element={<HomePage />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/category" element={<Category />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/profile/my-transaction" element={<MyTransaction />} />
+          <Route
+            path="/profile/store-transaction"
+            element={<StoreTransaction />}
+          />
+          <Route path="/profile/my-store" element={<MyStore />} />
+          <Route
+            path="/profile/my-store/edit-category"
+            element={<EditCategory />}
+          />
+          <Route
+            path="/profile/my-store/edit-create-category"
+            element={<EditCategoryCreateProduct />}
+          />
+          <Route
+            path="/profile/my-store/edit-product/:id"
+            element={<EditProduct />}
+          />
+          <Route path="/profile/sell-product" element={<CreateProduct />} />
+          <Route path="/products/:id" element={<SingleProduct />} />
+        </Routes>
+      </div>
       <FooterMobile />
       <FooterDesktop />
     </Router>

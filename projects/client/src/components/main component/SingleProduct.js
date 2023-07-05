@@ -16,8 +16,6 @@ const SingleProduct = () => {
       .get("https://fakestoreapi.com/products/1")
       .then((res) => setItem(res.data));
   }, []);
-  console.log(item);
-
   return (
     <div className="h-fit">
       <div className="grid grid-rows-6 mx-3 mb-16 gap-2 lg:grid lg:grid-rows-1 lg:grid-cols-3">
