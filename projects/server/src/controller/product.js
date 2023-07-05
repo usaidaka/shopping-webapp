@@ -1,5 +1,8 @@
-const { Product, User, Category } = require("../../models");
+const { Product, User, Category, OrderLine } = require("../../models");
 const db = require("../../models");
+
+//body sudah masuk sesuai inputan,
+// bikin file upload (multer utk upload photo product, nnt di enhance lg bisa nge crop supaya square)
 
 const editProduct = async (req, res) => {
   const { id } = req.params;
@@ -89,7 +92,7 @@ const getProducts = async (req, res) => {
     perPage: 9,
     catId: req.query.category || undefined,
     search: req.query.search || undefined,
-    sortBy: req.query.sortBy,
+    sortBy: req.query.sortBy || "desc",
   };
 
   try {
@@ -112,10 +115,17 @@ const getProducts = async (req, res) => {
     }
 
     const result = await Product.findAll({
+      attributes: {
+        exclude: ["product_id"],
+      },
       include: [
         {
           model: Category,
           attributes: ["category_name"],
+        },
+        {
+          model: OrderLine,
+          attributes: ["product_id"],
         },
       ],
       where,
