@@ -155,7 +155,10 @@ const getProducts = async (req, res) => {
 const getProductById = async (req, res) => {
   const { id } = req.params;
   try {
-    const result = await Product.findOne({ where: { id: id } });
+    const result = await Product.findOne(
+      { attributes: { exclude: ["product_id"] } },
+      { where: { id: id } }
+    );
     res.status(200).json({
       ok: true,
       data: result,

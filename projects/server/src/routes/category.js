@@ -5,19 +5,13 @@ const categoryController = require("../controller/category");
 const Validation = require("../validation");
 
 routerCategory.patch(
-  "/profile/my-store/category/:id",
+  "/category/:id",
   Validation.editCategoryValidation,
   Validation.runValidation,
   categoryController.editCategory
 );
-routerCategory.get(
-  "/profile/my-store/category",
-  categoryController.getCategory
-);
+routerCategory.get("/category", categoryController.getCategory);
 
-routerCategory.post(
-  "/profile/my-store/category",
-  categoryController.addCategory
-);
+routerCategory.post("/category", categoryController.addCategory);
 
 module.exports = routerCategory;

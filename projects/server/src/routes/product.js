@@ -4,14 +4,14 @@ const verifyToken = require("../middleware/verifyToken");
 const upload = require("../middleware/multerProduct");
 
 routerProduct.patch(
-  "/profile/my-store/edit-product/:id",
+  "/product/edit-product/:id",
   verifyToken,
   upload.single("file"),
   productController.editProduct
 );
 
 routerProduct.post(
-  "/profile/my-store/create-product",
+  "/product",
   verifyToken,
   upload.single("file"),
   productController.createProduct

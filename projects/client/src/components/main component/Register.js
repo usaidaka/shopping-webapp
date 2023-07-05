@@ -113,7 +113,7 @@ const Register = () => {
     formik.setFieldValue(target.name, target.value);
   };
   return (
-    <div className="bg-white h-screen lg:w-screen lg:grid lg:grid-cols-2 lg:items-center ">
+    <div className="bg-white h-screen lg:w-full lg:grid lg:grid-cols-2 lg:items-center ">
       <div className="lg:col-span-1 lg:grid">
         <img
           src={registerImage}

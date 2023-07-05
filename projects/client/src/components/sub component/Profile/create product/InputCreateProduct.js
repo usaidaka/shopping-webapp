@@ -19,9 +19,7 @@ const InputCreateProduct = () => {
   const token = useSelector((state) => state.auth.value);
 
   useEffect(() => {
-    axios
-      .get("profile/my-store/category")
-      .then((res) => setCategories(res.data.result));
+    axios.get("/category").then((res) => setCategories(res.data.result));
   }, []);
 
   /* formik yup untuk handle value dari input */
@@ -33,7 +31,7 @@ const InputCreateProduct = () => {
     formData.append("data", JSON.stringify(values));
     formData.append("file", image[0]);
     try {
-      axios.post("/profile/my-store/create-product", formData, {
+      axios.post("/product", formData, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setValues({

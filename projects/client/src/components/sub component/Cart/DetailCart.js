@@ -1,9 +1,9 @@
 import axios from "axios";
-import { Checkbox, Label } from "flowbite-react";
+import { Checkbox } from "flowbite-react";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-const Cart = () => {
+const DetailCart = () => {
   const [item, setItem] = useState("");
 
   useEffect(() => {
@@ -113,4 +113,4 @@ const Cart = () => {
   );
 };
 
-export default Cart;
+export default DetailCart;

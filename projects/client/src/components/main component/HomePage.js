@@ -7,12 +7,12 @@ import { ProductCard } from "../sub component/HomePage/ProductCard";
 const HomePage = () => {
   const [categories, setCategories] = useState([]);
   const [getByCategory, setGetByCategory] = useState("");
-  const [searchValue, setSearchValue] = useState("")
-  const [sortValue, setSortValue] = useState("createdAt")
-  const [orderValue, setOrderValue] = useState("desc")
+  const [searchValue, setSearchValue] = useState("");
+  const [sortValue, setSortValue] = useState("createdAt");
+  const [orderValue, setOrderValue] = useState("desc");
 
   useEffect(() => {
-    axios.get("http://localhost:8000/api/profile/my-store/category").then((res) => {
+    axios.get("http://localhost:8000/api/category").then((res) => {
       setCategories(res.data);
     });
   }, []);
@@ -26,15 +26,15 @@ const HomePage = () => {
   }
 
   function handleSearch(value) {
-    setSearchValue(value)
+    setSearchValue(value);
   }
 
   function handleSort(value) {
-    setSortValue(value)
+    setSortValue(value);
   }
 
   function handleOrder(value) {
-    setOrderValue(value)
+    setOrderValue(value);
   }
 
   return (
@@ -116,7 +116,11 @@ const HomePage = () => {
         </div>
       </div>
       <div>
-        <ProductCard category={getByCategory} searchInput={searchValue} sort={{sortBy: sortValue, orderBy: orderValue}}/>
+        <ProductCard
+          category={getByCategory}
+          searchInput={searchValue}
+          sort={{ sortBy: sortValue, orderBy: orderValue }}
+        />
       </div>
     </div>
   );

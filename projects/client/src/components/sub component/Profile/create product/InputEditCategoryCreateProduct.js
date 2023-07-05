@@ -12,16 +12,14 @@ const InputEditCategoryCreateProduct = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios
-      .get("/profile/my-store/category")
-      .then((res) => setCategories(res.data.result));
+    axios.get("/category").then((res) => setCategories(res.data.result));
   }, []);
 
   /* formik yup untuk handle value dari input */
   const editCategory = async (values, { setStatus, setValues }) => {
     try {
       if (selectedCategory === "add") {
-        const responseAdd = await axios.post(`profile/my-store/category`, {
+        const responseAdd = await axios.post(`/category`, {
           category_name: values.category_name,
         });
         console.log(values.category_name);
@@ -30,36 +28,29 @@ const InputEditCategoryCreateProduct = () => {
           setValues({
             category_name: "",
           });
-          axios
-            .get("/profile/my-store/category")
-            .then((res) => setCategories(res.data.result));
+          axios.get("/category").then((res) => setCategories(res.data.result));
           setSelectedCategory("select a category");
           setErrMsg(null);
-          navigate("/profile/my-store/create-product");
+          navigate("/profile/sell-product");
         } else {
           setSelectedCategory("select a category");
           throw new Error("Change category failed");
         }
       }
       if (selectedCategory !== "add") {
-        const response = await axios.patch(
-          `profile/my-store/category/${selectedCategory}`,
-          {
-            category_name: values.category_name,
-          }
-        );
+        const response = await axios.patch(`/category/${selectedCategory}`, {
+          category_name: values.category_name,
+        });
 
         if (response.status === 201) {
           setStatus({ success: true });
           setValues({
             category_name: "",
           });
-          axios
-            .get("/profile/my-store/category")
-            .then((res) => setCategories(res.data.result));
+          axios.get("/category").then((res) => setCategories(res.data.result));
           setSelectedCategory("select a category");
           setErrMsg(null);
-          navigate("/profile/my-store/create-product");
+          navigate("/profile/sell-product");
         } else {
           setSelectedCategory("select a category");
           throw new Error("Change category failed");

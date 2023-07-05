@@ -13,7 +13,7 @@ const db = require("../models");
 app.use(cors());
 app.use(express.json());
 app.use("/photo-product", express.static("public/product"));
-app.use("/photoProfile", express.static("public/profile"));
+app.use("/photo-profile", express.static("public/profile"));
 
 // ----------------> #region API ROUTES <---------------------
 app.use("/api", UserRoutes);

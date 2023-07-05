@@ -19,9 +19,7 @@ const InputEditProduct = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    axios
-      .get("profile/my-store/category")
-      .then((res) => setCategories(res.data.result));
+    axios.get("/category").then((res) => setCategories(res.data.result));
   }, []);
 
   /* formik yup untuk handle value dari input */
@@ -34,7 +32,7 @@ const InputEditProduct = () => {
     formData.append("file", image[0]);
 
     try {
-      axios.patch(`/profile/my-store/edit-product/${id}`, formData, {
+      axios.patch(`/product/edit-product/${id}`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -63,7 +61,7 @@ const InputEditProduct = () => {
       name_item: "",
       category_id: selectedCategory,
       product_description: "",
-      price: 0,
+      price: "",
       status: false,
     },
     onSubmit: EditProduct,
