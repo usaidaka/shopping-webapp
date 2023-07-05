@@ -1,4 +1,3 @@
-import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import TopSellingProduct from "../sub component/HomePage/TopSellingProduct";
@@ -8,20 +7,36 @@ import { ProductCard } from "../sub component/HomePage/ProductCard";
 const HomePage = () => {
   const [categories, setCategories] = useState([]);
   const [getByCategory, setGetByCategory] = useState("");
+  const [searchValue, setSearchValue] = useState("")
+  const [sortValue, setSortValue] = useState("createdAt")
+  const [orderValue, setOrderValue] = useState("desc")
 
   useEffect(() => {
-    axios.get("https://fakestoreapi.com/products?limit=15").then((res) => {
+    axios.get("http://localhost:8000/api/profile/my-store/category").then((res) => {
       setCategories(res.data);
     });
   }, []);
 
-  const uniqueCategories = [
-    ...new Set(categories.map((category) => category.category)),
-  ];
+  // const uniqueCategories = [
+  //   ...new Set(categories.result?.map((category) => category?.Category?.category_name)),
+  // ];
 
   function onClickCategory(cat) {
     setGetByCategory(cat);
   }
+
+  function handleSearch(value) {
+    setSearchValue(value)
+  }
+
+  function handleSort(value) {
+    setSortValue(value)
+  }
+
+  function handleOrder(value) {
+    setOrderValue(value)
+  }
+
   return (
     <div className="mx-3 ">
       <form className="flex lg:justify-center gap-2">
@@ -29,10 +44,8 @@ const HomePage = () => {
           type="text"
           placeholder="Search"
           className="border-1 w-full rounded-md border-green-soft lg:w-1/2"
+          onChange={(e) => handleSearch(e.target.value)}
         />
-        <button className="bg-green-strong h-[44px] w-[44px] rounded-md flex justify-center items-center">
-          <MagnifyingGlassIcon className="text-yellow-active bg-inherit w-4" />
-        </button>
       </form>
       <header>
         <div className="flex justify-between items-end mt-2 lg:grid lg:grid-cols-2">
@@ -57,15 +70,15 @@ const HomePage = () => {
           >
             All
           </button>
-          {uniqueCategories.map((category) => (
+          {categories.result?.map((category) => (
             <button
               onClick={() => {
-                onClickCategory(`category/${category}`);
+                onClickCategory(`${category.id}`);
               }}
               className="flex-none bg-green-soft text-white w-auto px-[10px] text-center rounded-[6px]"
-              key={category}
+              key={category.id}
             >
-              {category}
+              {category.category_name}
             </button>
           ))}
         </div>
@@ -75,9 +88,10 @@ const HomePage = () => {
           <select
             id="sortby"
             className="h-[32x] w-24 rounded-[6px] lg:w-[400px] border-green-soft"
+            onChange={(e) => handleSort(e.target.value)}
           >
-            <option value="">-Sort By-</option>
-            <option value="alphabet" id="alphabet">
+            <option value="createdAt">--Sort By--</option>
+            <option value="name_item" id="alphabet">
               Alphabet
             </option>
             <option value="price" id="price">
@@ -89,22 +103,20 @@ const HomePage = () => {
           <select
             id="orderby"
             className="h-[32x] w-24 rounded-[6px] lg:w-[400px] border-green-soft"
+            onChange={(e) => handleOrder(e.target.value)}
           >
-            <option value="">-Order By-</option>
-            <option value="ascending" id="ascending">
+            <option value="desc">--Order By--</option>
+            <option value="asc" id="ascending">
               Ascending
             </option>
-            <option value="descending" id="descending">
+            <option value="desc" id="descending">
               Descending
             </option>
           </select>
         </div>
-        <button className="w-10 h-10 bg-green-strong rounded-[6px] text-yellow-active">
-          Go
-        </button>
       </div>
       <div>
-        <ProductCard category={getByCategory} />
+        <ProductCard category={getByCategory} searchInput={searchValue} sort={{sortBy: sortValue, orderBy: orderValue}}/>
       </div>
     </div>
   );

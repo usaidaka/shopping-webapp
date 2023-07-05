@@ -1,4 +1,4 @@
-const { Product, User, Category } = require("../../models");
+const { Product, User, Category, OrderLine } = require("../../models");
 const db = require("../../models")
 
 //body sudah masuk sesuai inputan,
@@ -50,7 +50,7 @@ const createProduct = async (req, res) => {
           category_id: Number(data.category_id),
           name_item: data.name_item,
           product_description: data.product_description,
-          image_product: `/static/${imageURL}`,
+          image_product: `photoProduct/${imageURL}`,
           price: Number(data.price),
           status: data.status
       })
@@ -63,7 +63,7 @@ const createProduct = async (req, res) => {
     const data = JSON.parse(req.body.data)
   console.log(data)
       res.status(500).send({
-          message: "server error hahahaha",
+          message: "server error",
           error: error.message
       })
   }
@@ -75,7 +75,7 @@ const getProducts = async (req, res) => {
       perPage: 9,
       catId: req.query.category || undefined,
       search: req.query.search || undefined,
-      sortBy: req.query.sortBy
+      sortBy: req.query.sortBy || "desc"
   }
 
   try {
@@ -92,16 +92,24 @@ const getProducts = async (req, res) => {
           }
       }
 
+      
       const order = []
       for (const sort in pagination.sortBy) {
           order.push([sort, pagination.sortBy[sort]])
       }
 
       const result = await Product.findAll({
+        attributes: {
+          exclude: ["product_id"]
+        },
           include: [
               {
                   model: Category,
                   attributes: ["category_name"]
+              },
+              {
+                  model: OrderLine,
+                  attributes: ["product_id"]
               }
           ],
           where,
