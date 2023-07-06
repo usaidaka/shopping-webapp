@@ -15,5 +15,10 @@ routerUser.post(
   Validation.runValidation,
   UserController.login
 );
+routerUser.get(
+  "/auth/user-data",
+  verifyToken,
+  UserController.getUserInformation
+);
 
 module.exports = routerUser;

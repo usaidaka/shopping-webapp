@@ -13,7 +13,6 @@ const TopSellingProduct = () => {
   if (products.length === 0) {
     return <p></p>;
   }
-  console.log(products);
 
   const customTheme = {
     root: {

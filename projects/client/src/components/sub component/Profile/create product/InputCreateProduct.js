@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { NumericFormat } from "react-number-format";
 import { useSelector } from "react-redux";
 
+import noimage from "../../../../assets/noimage.png";
 //bagaimana nge set token agar saat di middleware db dapat terbaca/tervalidasi
 
 const InputCreateProduct = () => {
@@ -15,7 +16,9 @@ const InputCreateProduct = () => {
   const [errMsg, setErrMsg] = useState("");
   const [price, setPrice] = useState("");
   const [image, setImage] = useState("");
+  const [showImage, setShowImage] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
+
   const token = useSelector((state) => state.auth.value);
 
   useEffect(() => {
@@ -30,6 +33,7 @@ const InputCreateProduct = () => {
 
     formData.append("data", JSON.stringify(values));
     formData.append("file", image[0]);
+    setShowImage(image[0].name);
     try {
       axios.post("/product", formData, {
         headers: { Authorization: `Bearer ${token}` },
@@ -89,7 +93,8 @@ const InputCreateProduct = () => {
 
   const handleFile = (e) => {
     const files = e.target.files;
-
+    const file = e.target.files[0];
+    setShowImage(URL.createObjectURL(file));
     setImage([...files]);
   };
 
@@ -236,6 +241,13 @@ const InputCreateProduct = () => {
             <label className="block text-sm font-medium text-gray-900 dark:text-white">
               photo product
             </label>
+            <div className="flex justify-center lg:block">
+              <img
+                className="h-40 w-40 p-4 item"
+                src={showImage ? showImage : noimage}
+                alt=""
+              />
+            </div>
             <input
               onChange={handleFile}
               type="file"
