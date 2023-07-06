@@ -1,8 +1,19 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import dayjs from "dayjs";
 
 const DetailStoreTransaction = () => {
   const [item, setItem] = useState("");
+  const [startDate, setStartDate] = useState(() => {
+    const currentDate = dayjs()
+    const formattedStart = currentDate.subtract(7, "day").format("YYYY-MM-DD")
+    return formattedStart
+  })
+  const [endDate, setEndDate] = useState(() => {
+    const currentDate = dayjs()
+    const formattedEnd = currentDate.format("YYYY-MM-DD")
+    return formattedEnd
+  })
 
   useEffect(() => {
     axios
@@ -19,8 +30,23 @@ const DetailStoreTransaction = () => {
         <h1 className="font-bold mt-4">Incoming Transaction</h1>
       </div>
       {/* DATE PICKER */}
-      <div>
-        <input type="text" className="w-full" />
+      <div className="grid grid-rows-2 gap-2 lg:grid-cols-2 my-3">
+        <div className="row-span-1 lg:col-span-1 flex">
+          <div className="flex my-auto w-10 lg:w-auto">From</div>
+          <input 
+            type="date" 
+            onChange={(e) => setStartDate(e.target.value)} 
+            value={startDate}
+            className="w-full mx-2 rounded-md bg-gray-100 border-none" />
+        </div>
+        <div className="row-span-1 lg:col-span-1 flex">
+          <div className="flex my-auto w-10 lg:w-auto">To</div>
+          <input 
+            type="date" 
+            onChange={(e) => setEndDate(e.target.value)} 
+            value={endDate}
+            className="w-full mx-2 rounded-md bg-gray-100 border-none" />
+        </div>
       </div>
       <div>
         <h1>21 June 2023</h1>
