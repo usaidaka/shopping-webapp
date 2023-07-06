@@ -1,6 +1,5 @@
 /* SERVER TO CLIENT */
 const { check, body, validationResult } = require("express-validator");
-const { isURL } = require("validator");
 
 const runValidation = (req, res, next) => {
   const errors = validationResult(req);

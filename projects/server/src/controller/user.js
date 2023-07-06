@@ -1,7 +1,6 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { Op } = require("sequelize");
-const dayjs = require("dayjs");
 const db = require("../../models");
 const { User } = require("../../models");
 
@@ -143,7 +142,25 @@ const login = async (req, res) => {
   }
 };
 
+const getUserInformation = async (req, res) => {
+  const user = req.user;
+  try {
+    const result = await User.findOne({ where: { id: user.userId } });
+    res.json({
+      ok: true,
+      data: result,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      ok: false,
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   register,
   login,
+  getUserInformation,
 };

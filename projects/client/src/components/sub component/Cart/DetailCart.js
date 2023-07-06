@@ -2,6 +2,7 @@ import axios from "axios";
 import { Checkbox } from "flowbite-react";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { TrashIcon } from "@heroicons/react/24/outline";
 
 const DetailCart = () => {
   const [item, setItem] = useState("");
@@ -37,9 +38,12 @@ const DetailCart = () => {
             </div>
             <div className="col-span-3 grid grid-rows-7 bg-inherit lg:w-fit">
               <div className="row-span-6 flex flex-col gap-y-1 bg-inherit">
-                <h1 className="text-xs font-bold text-green-strong bg-inherit">
-                  {item.title}
-                </h1>
+                <div className="flex bg-inherit justify-between">
+                  <h1 className="text-xs font-bold text-green-strong bg-inherit">
+                    {item.title}
+                  </h1>
+                  <h1 className="text-xs bg-inherit font-semibold">Qty:1</h1>
+                </div>
                 <h1 className="text-xs bg-inherit lg:hidden">
                   {item.description.substring(0, 50)}...
                 </h1>
@@ -50,7 +54,10 @@ const DetailCart = () => {
                   <h1 className="text-xs font-bold text-green-strong bg-inherit">
                     {item.price}
                   </h1>
-                  <h1 className="text-xs bg-inherit">Qty: 1</h1>
+
+                  <div className="w-fit h-fit bg-inherit">
+                    <TrashIcon className="w-5 text-red-500 bg-inherit" />
+                  </div>
                 </div>
               </div>
             </div>

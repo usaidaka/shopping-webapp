@@ -4,7 +4,7 @@ import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import axios from "../../api/axios.js";
 import loginPic from "../../assets/6310507.webp";
@@ -24,7 +24,6 @@ const Login = () => {
       });
 
       const token = response.data?.accessToken;
-      console.log(response.data?.accessToken);
       if (response.status === 200) {
         setStatus({ success: true });
         setValues({
@@ -101,7 +100,7 @@ const Login = () => {
               <div className="lg:rounded-lg">
                 <form onSubmit={formik.handleSubmit} className="lg:rounded-xl">
                   {errMsg ? (
-                    <div className="w-screen bg-red-200 text-red-700 h-10 flex justify-center items-center mt-2 lg:w-full">
+                    <div className="w-full bg-red-200 text-red-700 h-10 flex justify-center items-center mt-2 lg:w-full">
                       <p className="bg-inherit">{errMsg}</p>
                     </div>
                   ) : null}

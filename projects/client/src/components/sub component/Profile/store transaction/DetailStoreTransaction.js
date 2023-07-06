@@ -1,3 +1,4 @@
+import { TrashIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
@@ -56,9 +57,12 @@ const DetailStoreTransaction = () => {
           </div>
           <div className="col-span-3 grid grid-rows-7 bg-inherit">
             <div className="row-span-6 flex flex-col gap-y-1 bg-inherit">
-              <h1 className="text-xs font-bold text-green-strong bg-inherit">
-                {item.title}
-              </h1>
+              <div className="bg-inherit flex justify-between">
+                <h1 className="text-xs font-bold text-green-strong bg-inherit">
+                  {item.title}
+                </h1>
+                <h1 className="text-xs bg-inherit font-semibold">Qty: 1</h1>
+              </div>
               <h1 className="text-xs bg-inherit lg:hidden">
                 {item.description.substring(0, 50)}...
               </h1>
@@ -69,7 +73,9 @@ const DetailStoreTransaction = () => {
                 <h1 className="text-xs font-bold text-green-strong bg-inherit">
                   {item.price}
                 </h1>
-                <h1 className="text-xs bg-inherit">Qty: 1</h1>
+                <div className="w-fit h-fit bg-inherit">
+                  <TrashIcon className="w-5 text-red-500 bg-inherit" />
+                </div>
               </div>
             </div>
           </div>

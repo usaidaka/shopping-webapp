@@ -1,8 +1,7 @@
 const { Product, User, Category, OrderLine } = require("../../models");
 const db = require("../../models");
 
-//body sudah masuk sesuai inputan,
-// bikin file upload (multer utk upload photo product, nnt di enhance lg bisa nge crop supaya square)
+// error edit product belum ke catch di front end
 
 const editProduct = async (req, res) => {
   const { id } = req.params;
@@ -21,11 +20,24 @@ const editProduct = async (req, res) => {
         price: data.price,
         status: data.status,
       },
-      { where: { id: id } }
+      { where: { id: id, user_id: user_id } }
     );
+
+    const result = await Product.findOne({
+      where: { user_id: user_id, id: id },
+      attributes: { exclude: ["product_id"] },
+    });
+    // console.log(typeof response[0]);
+    if (!result && response[0] === 0) {
+      return res.status(400).json({
+        ok: false,
+        message: "you cannot edit someone's product",
+      });
+    }
+
     res.status(201).json({
       ok: true,
-      data: response,
+      data: result,
     });
   } catch (error) {
     res.status(500).json({
@@ -39,7 +51,6 @@ const createProduct = async (req, res) => {
   const data = JSON.parse(req.body.data);
   console.log("data", data);
   const imageURL = req.file.filename;
-  console.log("img", imageURL);
   try {
     if (!data) {
       return res.status(400).send({
@@ -155,10 +166,18 @@ const getProducts = async (req, res) => {
 const getProductById = async (req, res) => {
   const { id } = req.params;
   try {
-    const result = await Product.findOne(
-      { attributes: { exclude: ["product_id"] } },
-      { where: { id: id } }
-    );
+    const result = await Product.findOne({
+      where: { id: Number(id) },
+      attributes: { exclude: ["product_id"] },
+    });
+
+    if (!result) {
+      return res.status(400).json({
+        ok: false,
+        message: "product not found",
+      });
+    }
+
     res.status(200).json({
       ok: true,
       data: result,
@@ -171,4 +190,62 @@ const getProductById = async (req, res) => {
     });
   }
 };
-module.exports = { editProduct, createProduct, getProducts, getProductById };
+
+const getUserProduct = async (req, res) => {
+  const user_id = req.user.userId;
+  try {
+    const result = await Product.findAll({
+      where: { user_id: user_id },
+      attributes: { exclude: ["product_id"] },
+    });
+
+    if (!result) {
+      return res.status(400).json({
+        ok: false,
+        message: "your product not found",
+      });
+    }
+
+    res.json({
+      ok: true,
+      data: result,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      ok: false,
+      message: error.message,
+    });
+  }
+};
+
+const deleteProduct = async (req, res) => {
+  const user_id = req.user.userId;
+  const { id } = req.params;
+  try {
+    const productData = await Product.destroy({
+      where: { id: id, user_id: user_id },
+    });
+    if (!productData) {
+      return res.status(400).json({
+        ok: false,
+        message: "you cannot delete someone's product",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      ok: false,
+      message: error.message,
+    });
+  }
+};
+
+module.exports = {
+  editProduct,
+  createProduct,
+  getProducts,
+  getProductById,
+  getUserProduct,
+  deleteProduct,
+};

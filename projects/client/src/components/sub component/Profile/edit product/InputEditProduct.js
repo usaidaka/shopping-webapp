@@ -3,9 +3,11 @@ import axios from "../../../../api/axios";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { FormControl, FormErrorMessage } from "@chakra-ui/react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { NumericFormat } from "react-number-format";
 import { useSelector } from "react-redux";
+
+import noimage from "../../../../assets/noimage.png";
 
 //bagaimana nge set token agar saat di middleware db dapat terbaca/tervalidasi
 
@@ -15,7 +17,9 @@ const InputEditProduct = () => {
   const [errMsg, setErrMsg] = useState("");
   const [price, setPrice] = useState("");
   const [image, setImage] = useState("");
+  const [showImage, setShowImage] = useState("");
   const token = useSelector((state) => state.auth.value);
+  const navigate = useNavigate();
   const { id } = useParams();
 
   useEffect(() => {
@@ -32,24 +36,36 @@ const InputEditProduct = () => {
     formData.append("file", image[0]);
 
     try {
-      axios.patch(`/product/edit-product/${id}`, formData, {
+      const responseAdd = axios.patch(`/product/edit-product/${id}`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      setValues({
-        name_item: "",
-        category_id: "",
-        product_description: "",
-        price: "",
-        status: false,
-      });
-      setSelectedCategory("");
-      setPrice("");
-    } catch (err) {
-      console.log(err);
-      if (!err.response) {
+
+      if (responseAdd.status === 201) {
+        setValues({
+          name_item: "",
+          category_id: "",
+          product_description: "",
+          price: "",
+          status: false,
+        });
+        setSelectedCategory("");
+        setPrice("");
+        navigate("/profile/my-store");
+      } else {
+        setErrMsg("you cannot edit someone's product");
+      }
+    } catch (error) {
+      console.log(error);
+      console.log("error", error);
+      if (!error.name?.response) {
         setErrMsg("No Server Response");
+      } else if (
+        error.name.response?.data?.message ===
+        "you cannot edit someone's product"
+      ) {
+        setErrMsg("you cannot edit someone's product");
       } else {
         setErrMsg("fatal error");
       }
@@ -87,7 +103,8 @@ const InputEditProduct = () => {
 
   const handleFile = (e) => {
     const files = e.target.files;
-
+    const file = e.target.files[0];
+    setShowImage(URL.createObjectURL(file));
     setImage([...files]);
   };
 
@@ -229,6 +246,13 @@ const InputEditProduct = () => {
             <label className="block text-sm font-medium text-gray-900 dark:text-white">
               photo product
             </label>
+            <div className="flex justify-center lg:block">
+              <img
+                className="h-40 w-40 p-4 item"
+                src={showImage ? showImage : noimage}
+                alt=""
+              />
+            </div>
             <input
               onChange={handleFile}
               type="file"

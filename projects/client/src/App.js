@@ -18,6 +18,7 @@ import MyTransaction from "./components/main component/MyTransaction";
 import StoreTransaction from "./components/main component/StoreTransaction";
 import MyStore from "./components/main component/MyStore";
 import Cart from "./components/sub component/Cart/DetailCart";
+import InputAddress from "./components/main component/InputAddress";
 
 function App() {
   const dispatch = useDispatch();
@@ -40,7 +41,10 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/category" element={<Category />} />
+
           <Route path="/cart" element={<Cart />} />
+          <Route path="/cart/shipping" element={<InputAddress />} />
+
           <Route path="/profile/my-transaction" element={<MyTransaction />} />
           <Route
             path="/profile/store-transaction"

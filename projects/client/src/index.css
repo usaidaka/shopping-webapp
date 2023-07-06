@@ -11,7 +11,8 @@
 }
 
 ::-webkit-scrollbar {
-  width: 0.5em;
+  height: 0.3em;
+  width: 0.3em;
 }
 
 ::-webkit-scrollbar-track {
@@ -21,6 +22,8 @@
 ::-webkit-scrollbar-thumb {
   background-color: #ffc107;
   border-radius: 1em;
+  height: 0.3em;
+  width: 0.3em;
 }
 
 @layer components {
