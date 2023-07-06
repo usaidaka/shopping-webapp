@@ -1,8 +1,14 @@
-const addOrderShop = (req, res) => {
-  const user = req.user;
-  console.log(user);
+const { Cart, Product } = require("../../models");
+
+const addOrderShop = async (req, res) => {
+  const user_id = req.user.id;
+
+  const cartResult = await Cart.findAll({
+    where: { user_id: user_id },
+  });
+
   res.json({
-    msg: "hello",
+    msg: cartResult,
   });
 };
 
