@@ -61,7 +61,7 @@ const HomePage = () => {
         <TopSellingProduct />
       </div>
       <div className="w-auto flex justify-center">
-        <div className="flex overflow-x-auto gap-[10px] mt-[10px] mb-[20px]">
+        <div className="flex overflow-x-auto gap-[10px] mt-[10px] mb-[20px] no-scrollbar">
           <button
             onClick={() => {
               onClickCategory(``);
