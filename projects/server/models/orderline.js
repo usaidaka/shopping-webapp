@@ -17,6 +17,15 @@ module.exports = (sequelize, DataTypes) => {
     {
       order_id: DataTypes.INTEGER,
       product_id: DataTypes.INTEGER,
+      createdAt: {
+        type: DataTypes.DATEONLY,
+        defaultValue: sequelize.NOW,
+        get() {
+          return new Date(this.getDataValue("createdAt"))
+            .toISOString()
+            .substring(0, 10);
+        },
+      },
     },
     {
       sequelize,

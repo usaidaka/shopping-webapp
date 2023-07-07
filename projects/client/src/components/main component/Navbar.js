@@ -3,6 +3,7 @@ import { Dialog, Popover } from "@headlessui/react";
 import {
   Bars3Icon,
   ShoppingCartIcon,
+  UserCircleIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -98,11 +99,7 @@ export default function Navbar() {
         {token ? (
           <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:gap-6">
             <Link to="/profile/my-transaction">
-              <img
-                src={imageProfile}
-                alt=""
-                className="lg:w-10 lg:rounded-full"
-              />
+              <UserCircleIcon className="lg:w-10 lg:rounded-full" />
             </Link>
             <Link to="/cart" className="lg:w-8">
               <ShoppingCartIcon />

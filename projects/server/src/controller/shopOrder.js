@@ -37,17 +37,16 @@ const addShopOrder = async (req, res) => {
       address: user_address,
     });
 
-    const mySoldProduct = await Product.findOne({
-      where: { user_id: user_id },
-    });
-
-    let product = 0;
     for (const item of cartResult) {
-      const myOrderLine = await OrderLine.create({
-        order_id: myOrder.id,
-        product_id: item.product_id,
-      });
+      for (let i = 1; i <= item.qty; i++) {
+        await OrderLine.create({
+          order_id: myOrder.id,
+          product_id: item.product_id,
+        });
+      }
     }
+
+    await Cart.destroy({ where: { user_id: user_id } });
 
     if (!myOrder) {
       return res.status(400).json({

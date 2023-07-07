@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Carousel } from "flowbite-react";
-import axios from "axios";
 import { Link } from "react-router-dom";
+import axios from "../../../api/axios";
 
 const TopSellingProduct = () => {
-  const [products, setProducts] = useState("");
+  const [products, setProducts] = useState([]);
   useEffect(() => {
-    axios.get("https://fakestoreapi.com/products?limit=5").then((res) => {
-      setProducts(res.data);
+    axios.get("/order-line/top-selling").then((res) => {
+      setProducts(res.data.data);
     });
   }, []);
+  console.log(products);
   if (products.length === 0) {
     return <p></p>;
   }
@@ -35,31 +36,33 @@ const TopSellingProduct = () => {
       <div className="flex justify-center items-center mt-0 w-full h-52">
         <Carousel theme={customTheme}>
           {products.map((product) => (
-            <div
-              className="w-60 h-[85px] grid grid-cols-4 grid-rows-3 mx-auto shadow-lg rounded-md lg:w-[800px]"
-              key={product.id}
-            >
-              <div className="justify-center flex row-span-3 col-span-1">
-                <img
-                  src={product.image}
-                  alt=""
-                  className="object-contain h-[85px]"
-                ></img>
-              </div>
-              <div className="col-span-3">
-                <p className="font-bold whitespace-nowrap overflow-hidden text-ellipsis py-auto px-[10px]">
-                  {product.title}
-                </p>
-              </div>
-              <div className="col-span-3">
-                <p className="whitespace-nowrap overflow-hidden text-ellipsis py-auto px-[10px]">
-                  {product.description}
-                </p>
-              </div>
-              <div className="col-span-3">
-                <p className="font-bold py-auto text-green-400 px-[10px]">
-                  {product.price}
-                </p>
+            <div className={product?.Product?.id}>
+              <div
+                key={product?.Product?.id}
+                className="w-60 h-[85px] grid grid-cols-4 grid-rows-3 mx-auto shadow-lg rounded-md lg:w-[800px]"
+              >
+                <div className="justify-center flex row-span-3 col-span-1">
+                  <img
+                    src={product?.Product?.image_product}
+                    alt=""
+                    className="object-contain h-[85px]"
+                  ></img>
+                </div>
+                <div className="col-span-3">
+                  <p className="font-bold whitespace-nowrap overflow-hidden text-ellipsis py-auto px-[10px]">
+                    {product?.Product?.name_item}
+                  </p>
+                </div>
+                <div className="col-span-3">
+                  <p className="whitespace-nowrap overflow-hidden text-ellipsis py-auto px-[10px]">
+                    {product?.Product?.product_description}
+                  </p>
+                </div>
+                <div className="col-span-3">
+                  <p className="font-bold py-auto text-green-400 px-[10px]">
+                    {product?.Product?.price}
+                  </p>
+                </div>
               </div>
             </div>
           ))}

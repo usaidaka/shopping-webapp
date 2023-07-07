@@ -9,6 +9,7 @@ import axios from "../../../api/axios";
 const DetailCart = () => {
   const [items, setItems] = useState("");
   const [count, setCount] = useState(0);
+
   const token = localStorage.getItem("token");
 
   // ngirim props ke order summary dan meneruskan ke checkout
@@ -29,14 +30,18 @@ const DetailCart = () => {
         })
         .then((res) => {
           console.log(res);
-          axios.get("/products/user", {
-            headers: { Authorization: `Bearer ${token}` },
-          });
+          axios
+            .get("/cart", {
+              headers: { Authorization: `Bearer ${token}` },
+            })
+            .then((res) => setItems(res.data.message));
         });
     } catch (error) {
       console.log(error);
     }
   };
+  console.log("test", items);
+  console.log(!items);
 
   if (!items) {
     return <p></p>;
@@ -70,7 +75,7 @@ const DetailCart = () => {
                       />
                     </div>
                     <img
-                      src={item.Product.image_product}
+                      src={item.Product?.image_product}
                       alt=""
                       className="w-10 mr-2 lg:w-16 bg-inherit"
                     />
@@ -79,21 +84,21 @@ const DetailCart = () => {
                     <div className="row-span-6 flex flex-col gap-y-1 bg-inherit">
                       <div className="flex bg-inherit justify-between">
                         <h1 className="text-xs font-bold text-green-strong bg-inherit">
-                          {item.Product.name_item}
+                          {item.Product?.name_item}
                         </h1>
                         <h1 className="text-xs bg-inherit font-semibold lg:mr-10">
                           Qty: {item.qty}
                         </h1>
                       </div>
                       <h1 className="text-xs bg-inherit lg:hidden">
-                        {item.Product.product_description}
+                        {item.Product?.product_description}
                       </h1>
                       <h1 className="hidden lg:block lg:text-xs lg:bg-inherit">
-                        {item.Product.product_description}
+                        {item.Product?.product_description}
                       </h1>
                       <div className="row-span-1 h-fit flex justify-between items-end bg-inherit">
                         <h1 className="text-xs font-bold text-green-strong bg-inherit">
-                          {toRupiah(item.Product.price)}
+                          {item.Product?.price}
                         </h1>
 
                         <div className="w-fit h-fit bg-inherit">

@@ -11,4 +11,6 @@ routerOrderLine.get(
   orderLineController.getOrderLine
 );
 
+routerOrderLine.get("/order-line/top-selling", orderLineController.topSelling);
+
 module.exports = routerOrderLine;

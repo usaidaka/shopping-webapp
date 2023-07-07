@@ -26,9 +26,11 @@ const DetailMyStore = () => {
         })
         .then((res) => {
           console.log(res);
-          axios.get("/products/user", {
-            headers: { Authorization: `Bearer ${token}` },
-          });
+          axios
+            .get("/products/user", {
+              headers: { Authorization: `Bearer ${token}` },
+            })
+            .then((res) => setItems(res.data));
         });
     } catch (error) {
       console.log(error);
@@ -46,14 +48,11 @@ const DetailMyStore = () => {
       <div>
         <h1 className="font-bold mt-4">Store Product</h1>
       </div>
-      <div>
-        <input type="text" className="w-full" />
-      </div>
+      {/* FILTER ACTIVE DAN DEACTIVE */}
       {/* DATE PICKER */}
       {userProducts.map((item) => (
         <div key={item.id}>
           <div>
-            <h1>21 June 2023</h1>
             <div className="drop-shadow-md mx-3 h-[130px] my-2 grid grid-cols-4 items-center p-2 rounded-lg bg-green-footer">
               <div className="col-span-1 flex flex-col justify-center items-center lg:mr-5 lg:my-auto bg-inherit">
                 <Link
