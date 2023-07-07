@@ -10,6 +10,7 @@ const CategoryRoutes = require("./routes/category");
 const ProductRoutes = require("./routes/product");
 const CartRoutes = require("./routes/cart");
 const ShopOrderRoutes = require("./routes/shopOrder");
+const OrderLineRoutes = require("./routes/orderLine");
 const db = require("../models");
 
 app.use(cors());
@@ -23,6 +24,7 @@ app.use("/api", CategoryRoutes);
 app.use("/api", ProductRoutes);
 app.use("/api", CartRoutes);
 app.use("/api", ShopOrderRoutes);
+app.use("/api", OrderLineRoutes);
 
 // ===========================
 

@@ -31,8 +31,7 @@ const SingleProduct = () => {
         }
       );
       setCount(0);
-      setIsSuccess("added to card successfully");
-      console.log(response.data);
+      setIsSuccess(response.data.message);
     } catch (error) {
       console.log(error);
     }
@@ -42,12 +41,10 @@ const SingleProduct = () => {
     return <p></p>;
   }
 
-  console.log("tes", item);
-
   return (
     <div className="h-fit">
       {isSuccess ? (
-        <div className="w-full bg-blue-200 text-blue-700 h-10 rounded-lg flex justify-center items-center mt-2 lg:flex lg:justify-center lg:w-[500px] lg:mx-auto lg:my-5">
+        <div className="w-full hidden bg-blue-200 text-blue-700 h-10 rounded-lg justify-center items-center mt-2 lg:flex lg:justify-center lg:w-[500px] lg:mx-auto lg:my-5">
           <p className="bg-inherit">{isSuccess}</p>
         </div>
       ) : null}
@@ -78,7 +75,7 @@ const SingleProduct = () => {
         </div>
         <div className="row-span-1 grid grid-cols-2 justify-center items-center lg:gap-1 lg:flex lg:flex-col lg:py-5 lg:w-96 lg:bg-green-footer rounded-lg">
           <div className="hidden lg:block lg:bg-inherit">
-            <h1 className="lg:bg-inherit lg:font-bold">Atur Jumlah</h1>
+            <h1 className="lg:bg-inherit lg:font-bold">Set Amount</h1>
           </div>
           <div className="col-span-1 mx-auto lg:flex lg:bg-inherit">
             <h1 className="hidden lg:block lg:font-semibold lg:text-2xl lg:bg-inherit">
@@ -98,7 +95,7 @@ const SingleProduct = () => {
               >
                 <MinusIcon className="bg-inherit text-yellow-active rounded-lg" />
               </button>
-              <h1 className="text-2xl ">{count}</h1>
+              <h1 className="text-2xl bg-inherit ">{count}</h1>
               <button className="w-10 block  bg-green-strong rounded-lg">
                 <PlusIcon
                   className="bg-inherit text-yellow-active rounded-lg"

@@ -1,26 +1,30 @@
 import { TrashIcon } from "@heroicons/react/24/outline";
-import axios from "axios";
+
 import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
+import toRupiah from "@develoka/angka-rupiah-js";
+import axios from "../../../../api/axios";
 
 const DetailStoreTransaction = () => {
   const [item, setItem] = useState("");
   const [startDate, setStartDate] = useState(() => {
-    const currentDate = dayjs()
-    const formattedStart = currentDate.subtract(7, "day").format("YYYY-MM-DD")
-    return formattedStart
-  })
+    const currentDate = dayjs();
+    const formattedStart = currentDate.subtract(7, "day").format("YYYY-MM-DD");
+    return formattedStart;
+  });
   const [endDate, setEndDate] = useState(() => {
-    const currentDate = dayjs()
-    const formattedEnd = currentDate.format("YYYY-MM-DD")
-    return formattedEnd
-  })
+    const currentDate = dayjs();
+    const formattedEnd = currentDate.format("YYYY-MM-DD");
+    return formattedEnd;
+  });
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     axios
-      .get("https://fakestoreapi.com/products/1")
+      .get("/order-line", { headers: { Authorization: `Bearer ${token}` } })
       .then((res) => setItem(res.data));
   }, []);
+  console.log("teeeeest", item);
   if (!item) {
     return <p></p>;
   }
@@ -34,25 +38,29 @@ const DetailStoreTransaction = () => {
       <div className="grid grid-rows-2 gap-2 lg:grid-cols-2 my-3">
         <div className="row-span-1 lg:col-span-1 flex">
           <div className="flex my-auto w-10 lg:w-auto">From</div>
-          <input 
-            type="date" 
-            onChange={(e) => setStartDate(e.target.value)} 
+          <input
+            type="date"
+            onChange={(e) => setStartDate(e.target.value)}
             value={startDate}
-            className="w-full mx-2 rounded-md bg-gray-100 border-none" />
+            className="w-full mx-2 rounded-md bg-gray-100 border-none"
+          />
         </div>
         <div className="row-span-1 lg:col-span-1 flex">
           <div className="flex my-auto w-10 lg:w-auto">To</div>
-          <input 
-            type="date" 
-            onChange={(e) => setEndDate(e.target.value)} 
+          <input
+            type="date"
+            onChange={(e) => setEndDate(e.target.value)}
             value={endDate}
-            className="w-full mx-2 rounded-md bg-gray-100 border-none" />
+            className="w-full mx-2 rounded-md bg-gray-100 border-none"
+          />
         </div>
       </div>
       <div>
-        <h1>21 June 2023</h1>
+        <h1 className="lg:text-2xl font-semibold text-green-strong">
+          Total Income
+        </h1>
         <div className="drop-shadow-2xl mx-3 h-[130px] my-2 grid grid-cols-4 items-center p-2 rounded-lg bg-green-footer">
-          <div className="col-span-1 flex flex-col justify-center items-center bg-inherit">
+          {/*  <div className="col-span-1 flex flex-col justify-center items-center bg-inherit">
             <img src={item.image} alt="" className="w-14 bg-inherit" />
           </div>
           <div className="col-span-3 grid grid-rows-7 bg-inherit">
@@ -78,6 +86,10 @@ const DetailStoreTransaction = () => {
                 </div>
               </div>
             </div>
+          </div> */}
+
+          <div className="col-span-1 flex flex-col justify-center items-center bg-inherit">
+            <h1 className="bg-inherit lg:text-4xl">{toRupiah(item.total)}</h1>
           </div>
         </div>
       </div>
@@ -89,8 +101,8 @@ const DetailStoreTransaction = () => {
           <h1 className="bg-inherit font-bold text-sm text-green-soft">
             Total Income :
           </h1>
-          <h1 className="bg-inherit font-semibold text-xl text-green-strong">
-            {item.price}
+          <h1 className="bg-inherit font-semibold lg:text-xl text-green-strong">
+            {toRupiah(item.total)}
           </h1>
         </div>
       </div>

@@ -232,6 +232,10 @@ const deleteProduct = async (req, res) => {
         message: "you cannot delete someone's product",
       });
     }
+    res.status(200).json({
+      ok: true,
+      data: productData,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({

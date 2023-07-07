@@ -44,12 +44,28 @@ const Login = () => {
     } catch (err) {
       if (!err.response) {
         setErrMsg("No Server Response");
+        setValues({
+          user_identification: "",
+          password: "",
+        });
       } else if (err.response?.data?.message === "user unauthorized") {
         setErrMsg("user unauthorized");
+        setValues({
+          user_identification: "",
+          password: "",
+        });
       } else if (err.response?.data?.message === "wrong password") {
         setErrMsg("wrong password");
+        setValues({
+          user_identification: "",
+          password: "",
+        });
       } else {
         setErrMsg("Registration failed");
+        setValues({
+          user_identification: "",
+          password: "",
+        });
       }
     }
   };

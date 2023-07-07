@@ -1,11 +1,17 @@
-const routerOrderShop = require("express").Router();
+const routerShopOrder = require("express").Router();
 const verifyToken = require("../middleware/verifyToken");
 const orderShopController = require("../controller/shopOrder");
 
-routerOrderShop.post(
+routerShopOrder.post(
   "/order-shop",
   verifyToken,
-  orderShopController.addOrderShop
+  orderShopController.addShopOrder
 );
 
-module.exports = routerOrderShop;
+routerShopOrder.get(
+  "/order-shop",
+  verifyToken,
+  orderShopController.geyMyTransaction
+);
+
+module.exports = routerShopOrder;

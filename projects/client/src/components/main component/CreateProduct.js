@@ -3,7 +3,6 @@ import ProfileDetail from "../sub component/Profile/ProfileDetail";
 import CardNavbarEditCategory from "../sub component/Profile/CardNavbar";
 import InputCreateProduct from "../sub component/Profile/create product/InputCreateProduct";
 
-
 const CreateProduct = () => {
   return (
     <div className="mb-16 lg:grid lg:grid-cols-4 ">
