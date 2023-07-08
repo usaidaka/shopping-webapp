@@ -1,4 +1,4 @@
-const { Product, User, Category, OrderLine } = require("../../models");
+const { Product, User, Category, OrderLine, Cart } = require("../../models");
 const db = require("../../models");
 
 // error edit product belum ke catch di front end
@@ -27,7 +27,7 @@ const editProduct = async (req, res) => {
       where: { user_id: user_id, id: id },
       attributes: { exclude: ["product_id"] },
     });
-    // console.log(typeof response[0]);
+
     if (!result && response[0] === 0) {
       return res.status(400).json({
         ok: false,
@@ -222,6 +222,7 @@ const getUserProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
   const user_id = req.user.userId;
   const { id } = req.params;
+  console.log(id);
   try {
     const productData = await Product.destroy({
       where: { id: id, user_id: user_id },
@@ -232,6 +233,24 @@ const deleteProduct = async (req, res) => {
         message: "you cannot delete someone's product",
       });
     }
+    const isProductInCartExist = await Cart.findOne({
+      where: { product_id: id },
+    });
+
+    if (isProductInCartExist) {
+      await Cart.destroy({ where: { product_id: id, user_id: user_id } });
+    }
+
+    const isProductInOrderLine = await OrderLine.findOne({
+      where: { product_id: id },
+    });
+
+    if (isProductInOrderLine) {
+      await isProductInOrderLine.destroy({
+        where: { product_id: id },
+      });
+    }
+
     res.status(200).json({
       ok: true,
       data: productData,

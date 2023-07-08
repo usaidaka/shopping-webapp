@@ -1,30 +1,28 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Login from "./components/main component/Login";
-import Register from "./components/main component/Register";
-import HomePage from "./components/main component/HomePage";
-import Navbar from "./components/main component/Navbar";
-import FooterMobile from "./components/main component/FooterMobile";
-import EditCategory from "./components/main component/EditCategory";
-import Category from "./components/main component/Category";
-import FooterDesktop from "./components/main component/FooterDesktop";
-import EditProduct from "./components/main component/EditProduct";
+import Login from "./components/mainComponent/Login";
+import Register from "./components/mainComponent/Register";
+import HomePage from "./components/mainComponent/HomePage";
+import Navbar from "./components/mainComponent/Navbar";
+import FooterMobile from "./components/mainComponent/FooterMobile";
+import EditCategory from "./components/mainComponent/EditCategory";
+import Category from "./components/mainComponent/Category";
+import FooterDesktop from "./components/mainComponent/FooterDesktop";
+import EditProduct from "./components/mainComponent/EditProduct";
 import { useDispatch } from "react-redux";
 import { setTokenAccess } from "./thunk/authSlice";
 import { useEffect } from "react";
-import CreateProduct from "./components/main component/CreateProduct";
-import EditCategoryCreateProduct from "./components/main component/EditCategoryCreateProduct";
-import SingleProduct from "./components/main component/SingleProduct";
-import MyTransaction from "./components/main component/MyTransaction";
-import StoreTransaction from "./components/main component/StoreTransaction";
-import MyStore from "./components/main component/MyStore";
-import Cart from "./components/sub component/Cart/DetailCart";
-import InputAddress from "./components/main component/InputAddress";
+import CreateProduct from "./components/mainComponent/CreateProduct";
+import EditCategoryCreateProduct from "./components/mainComponent/EditCategoryCreateProduct";
+import SingleProduct from "./components/mainComponent/SingleProduct";
+import MyTransaction from "./components/mainComponent/MyTransaction";
+import StoreTransaction from "./components/mainComponent/StoreTransaction";
+import MyStore from "./components/mainComponent/MyStore";
+import Cart from "./components/subComponent/Cart/DetailCart";
+import InputAddress from "./components/mainComponent/InputAddress";
 
 function App() {
   const dispatch = useDispatch();
   useEffect(() => {
-    // check localstorage
-    // dispatch token from localstorage to redux state
     const token = localStorage.getItem("token");
     if (token) {
       dispatch(setTokenAccess(token));

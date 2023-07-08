@@ -13,6 +13,9 @@ module.exports = {
         "green-button": "#00CB45",
         "yellow-active": "#FFC107",
       },
+      fontFamily: {
+        sans: ["inter"],
+      },
     },
   },
   plugins: [require("flowbite/plugin")],
