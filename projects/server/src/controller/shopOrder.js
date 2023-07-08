@@ -1,4 +1,5 @@
 const { Cart, Product, ShopOrder, OrderLine } = require("../../models");
+const db = require("../../models")
 const dayjs = require("dayjs");
 
 const addShopOrder = async (req, res) => {
@@ -70,16 +71,24 @@ const addShopOrder = async (req, res) => {
 
 const geyMyTransaction = async (req, res) => {
   const user_id = req.user.userId;
-  // nge query untuk filter date
-  const data = {
-    startDate: req.query.startDate,
-    endDate: req.query.endDate,
-  };
+  const currentDate = dayjs();
+  const sevenDaysPrior = currentDate.subtract(7, "day").format("YYYY-MM-DD");
+  const currentDatePlus1 = currentDate.add(1, "day").format("YYYY-MM-DD");
+  const startDate =
+    req.query.startDate ? req.query.startDate = dayjs(req.query.startDate).format("YYYY-MM-DD") : sevenDaysPrior;
+  const endDate = req.query.endDate ? req.query.endDate = dayjs(req.query.endDate).format("YYYY-MM-DD") : currentDatePlus1;
+  console.log(startDate);
+  console.log(endDate);
 
   try {
     // ngambil semua orderline buat cek my transaction
     const transaction = await ShopOrder.findAll({
-      where: { user_id: user_id },
+      where: { 
+        user_id: user_id,
+        createdAt: {
+          [db.Sequelize.Op.between]: [startDate, endDate],
+        }, 
+      },
     });
     if (!transaction) {
       return res.json({
@@ -94,6 +103,7 @@ const geyMyTransaction = async (req, res) => {
     console.log(total);
     res.json({
       ok: true,
+      result: transaction,
       data: total,
     });
   } catch (error) {

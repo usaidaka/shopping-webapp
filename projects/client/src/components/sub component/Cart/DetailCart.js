@@ -18,7 +18,7 @@ const DetailCart = () => {
   useEffect(() => {
     axios
       .get("/cart", { headers: { Authorization: `Bearer ${token}` } })
-      .then((res) => setItems(res.data.message));
+      .then((res) => setItems(res.data));
   }, []);
 
   // buat nge delete cart (klo misal ga jadi beli)
@@ -34,7 +34,7 @@ const DetailCart = () => {
             .get("/cart", {
               headers: { Authorization: `Bearer ${token}` },
             })
-            .then((res) => setItems(res.data.message));
+            .then((res) => setItems(res.data));
         });
     } catch (error) {
       console.log(error);
@@ -54,7 +54,7 @@ const DetailCart = () => {
       </div>
       <div className="lg:flex lg:justify-center">
         <div className="lg:col-span-3 lg:mr-10 mx-2 lg:mx-10 lg:block">
-          {items.map((item) => (
+          {items.message?.map((item) => (
             <div key={item.id}>
               <div>
                 <h1 className="text-xs font-semibold">
@@ -98,7 +98,7 @@ const DetailCart = () => {
                       </h1>
                       <div className="row-span-1 h-fit flex justify-between items-end bg-inherit">
                         <h1 className="text-xs font-bold text-green-strong bg-inherit">
-                          {item.Product?.price}
+                          {toRupiah(item.Product?.price)}
                         </h1>
 
                         <div className="w-fit h-fit bg-inherit">
@@ -124,7 +124,7 @@ const DetailCart = () => {
                 Total Price ({count} barang) :
               </h1>
               <h1 className="lg:text-xl lg:font-semibold lg:text-green-strong lg:bg-inherit">
-                Rp 70.000
+                {toRupiah(items.total)}
               </h1>
             </div>
             <div className="lg:row-span-1 lg:bg-inherit lg:rounded-lg">
@@ -161,7 +161,7 @@ const DetailCart = () => {
           </h1>
           <div className="flex justify-between">
             <h1 className="bg-inherit font-semibold text-xl text-green-strong">
-              Rp. 70.000
+            {toRupiah(items.total)}
             </h1>
             <Link
               to="/cart/shipping"

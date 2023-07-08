@@ -107,7 +107,9 @@ const getProducts = async (req, res) => {
   };
 
   try {
-    const where = {};
+    const where = {
+      status: true
+    };
     if (pagination.search) {
       where.name_item = {
         [db.Sequelize.Op.like]: `%${pagination.search}%`,
@@ -192,10 +194,13 @@ const getProductById = async (req, res) => {
 };
 
 const getUserProduct = async (req, res) => {
+  const status = req.query.status === "true" 
   const user_id = req.user.userId;
   try {
     const result = await Product.findAll({
-      where: { user_id: user_id },
+      where: { 
+        user_id: user_id,
+        status: status },
       attributes: { exclude: ["product_id"] },
     });
 

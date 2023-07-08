@@ -19,15 +19,17 @@ const DetailMyTransaction = () => {
 
   useEffect(() => {
     axios
-      .get("/order-shop", { headers: { Authorization: `Bearer ${token}` } })
+      .get(`/order-shop?startDate=${startDate}&endDate=${endDate}`, { headers: { Authorization: `Bearer ${token}` } })
       .then((res) => setItem(res.data));
-  }, []);
+  }, [startDate, endDate]);
 
   console.log("item", item);
   if (!item) {
     return <p></p>;
   }
 
+  console.log(startDate)
+  console.log(endDate)
   return (
     <div className="lg:col-span-3 lg:mr-10">
       <div>

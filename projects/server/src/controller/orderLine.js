@@ -8,10 +8,8 @@ const getOrderLine = async (req, res) => {
   const sevenDaysPrior = currentDate.subtract(7, "day").format("YYYY-MM-DD");
   const currentDatePlus1 = currentDate.add(1, "day").format("YYYY-MM-DD");
   const startDate =
-    dayjs(req.query.startDate).format("YYYY-MM-DD") || sevenDaysPrior;
-  const endDate = dayjs(req.query.endDate).format("YYYY-MM-DD")
-    ? dayjs(req.query.endDate).format("YYYY-MM-DD")
-    : currentDatePlus1;
+    req.query.startDate ? req.query.startDate = dayjs(req.query.startDate).format("YYYY-MM-DD") : sevenDaysPrior;
+  const endDate = req.query.endDate ? req.query.endDate = dayjs(req.query.endDate).format("YYYY-MM-DD") : currentDatePlus1;
   console.log(startDate);
   console.log(endDate);
 
@@ -23,7 +21,7 @@ const getOrderLine = async (req, res) => {
           model: ShopOrder,
           where: {
             createdAt: {
-              [db.Sequelize.Op.between]: [startDate, "2023-07-10"],
+              [db.Sequelize.Op.between]: [startDate, endDate],
             },
           },
         },
