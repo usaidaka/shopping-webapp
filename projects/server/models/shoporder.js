@@ -19,6 +19,15 @@ module.exports = (sequelize, DataTypes) => {
       order_date: DataTypes.DATE,
       order_total: DataTypes.INTEGER,
       address: DataTypes.STRING,
+      createdAt: {
+        type: DataTypes.DATEONLY,
+        defaultValue: sequelize.NOW,
+        get() {
+          return new Date(this.getDataValue("createdAt"))
+            .toISOString()
+            .substring(0, 10);
+        },
+      },
     },
     {
       sequelize,

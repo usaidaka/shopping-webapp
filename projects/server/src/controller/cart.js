@@ -57,9 +57,15 @@ const getUserCart = async (req, res) => {
       include: [Product],
     });
 
+    let total = 0;
+    for (const item of result) {
+      total += (item.Product.price*item.qty);
+    }
+
     res.json({
       ok: true,
       message: result,
+      total
     });
   } catch (error) {
     console.log(error);

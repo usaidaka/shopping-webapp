@@ -22,15 +22,25 @@ const DetailStoreTransaction = () => {
 
   useEffect(() => {
     axios
-      .get("/order-line", { headers: { Authorization: `Bearer ${token}` } })
+      .get(`/order-line?startDate=${startDate}&endDate=${endDate}`, 
+      { headers: { Authorization: `Bearer ${token}` } })
       .then((res) => setItem(res.data));
-  }, []);
+  }, [startDate, endDate]);
+
   console.log("teeeeest", item);
+  console.log(startDate)
+  console.log(endDate)
   if (!item) {
     return <p></p>;
   }
 
+  const uniqueDate = [
+    ... new Set(item.data?.map((data) => data?.ShopOrder?.createdAt))
+  ]
+  console.log(uniqueDate)
+
   return (
+    <>
     <div className="lg:col-span-3 lg:mr-10">
       <div>
         <h1 className="font-bold mt-4">Incoming Transaction</h1>
@@ -94,6 +104,21 @@ const DetailStoreTransaction = () => {
           </div>
         </div>
       </div>
+      {uniqueDate.map((date) => {
+        let totalIncomePerDay = 0
+        return (
+        <div>
+          <div>{dayjs(`${date}`).locale("en").format("D MMMM YYYY")}</div>
+          {item.data?.map((data) => {
+            if (data.ShopOrder.createdAt === date) { 
+              totalIncomePerDay += data.Product.price;
+            }
+            else {return null}
+          })}
+          <div>{toRupiah(totalIncomePerDay)}</div>
+        </div>
+        )
+      })}
       <div className="relative w-full h-11 mb-14 bottom-0 lg:hidden">
         <div>
           <hr className="h-[3px] bg-green-soft mx-3 mb-1" />
@@ -108,6 +133,7 @@ const DetailStoreTransaction = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
