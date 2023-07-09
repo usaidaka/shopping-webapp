@@ -31,6 +31,11 @@ const DetailMyTransaction = () => {
 
   console.log(startDate)
   console.log(endDate)
+
+  const uniqueDate = [
+    ...new Set(item.result?.map((result) => result?.createdAt))
+  ]
+  console.log(uniqueDate)
   return (
     <div className="lg:col-span-3 lg:mr-10">
       <div>
@@ -90,6 +95,21 @@ const DetailMyTransaction = () => {
           </div>
         </div>
       </div>
+      {uniqueDate.map((date) => {
+        let totalTransactionPerDay = 0
+        return (
+        <div>
+          <div>{dayjs(`${date}`).locale("en").format("D MMMM YYYY")}</div>
+          {item.result?.map((result) => {
+            if (result.createdAt === date) { 
+              totalTransactionPerDay += result.order_total;
+            }
+            else {return null}
+          })}
+          <div>{toRupiah(totalTransactionPerDay)}</div>
+        </div>
+        )
+      })}
       <div className="relative w-full h-11 mb-14 bottom-0 lg:hidden">
         <div>
           <hr className="h-[3px] bg-green-soft mx-3 mb-1" />

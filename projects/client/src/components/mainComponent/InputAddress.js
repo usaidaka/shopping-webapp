@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import gopay from "../../assets/gojek.png";
 import paypal from "../../assets/paypal.png";
@@ -14,6 +14,7 @@ const InputAddress = () => {
   const [isSuccess, setIsSuccess] = useState("");
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
+  const totalPayment = localStorage.getItem("totalPayment")
 
   const handleInputAddress = async () => {
     try {
@@ -140,7 +141,7 @@ const InputAddress = () => {
             <div className="flex justify-between items-center lg:hidden">
               <div>
                 <h1 className="font-semibold">Total Payment</h1>
-                <h1 className="font-bold text-green-strong">Rp. 20.000</h1>
+                <h1 className="font-bold text-green-strong">{totalPayment}</h1>
               </div>
 
               <button
@@ -160,7 +161,7 @@ const InputAddress = () => {
             <h1 className="bg-inherit lg:font-semibold lg:text-green-strong">
               Total Order (1 item)
             </h1>
-            <h1 className="bg-inherit">Rp 70.000</h1>
+            <h1 className="bg-inherit">{totalPayment}</h1>
           </div>
           <div className="mt-3  hidden lg:block lg:bg-inherit">
             <hr className="h-[3px] bg-green-soft mx-3 mb-1 " />

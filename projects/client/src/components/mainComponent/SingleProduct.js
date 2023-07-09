@@ -89,6 +89,8 @@ const SingleProduct = () => {
           <p className="text-xs lg:bg-inherit lg:mt-4 lg:text-xl">
             {item.product_description}
           </p>
+          <p className="text-xs lg:bg-inherit lg:mt-4 lg:text-xl text-gray-500">
+            {item.User?.store_name}</p>
           <p className="hidden lg:block lg:mt-20 lg:bg-inherit lg:text-3xl lg:font-bold   lg:text-green-strong">
             {toRupiah(item.price)}
           </p>

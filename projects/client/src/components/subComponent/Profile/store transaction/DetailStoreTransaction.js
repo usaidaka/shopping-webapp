@@ -35,7 +35,7 @@ const DetailStoreTransaction = () => {
   }
 
   const uniqueDate = [
-    ... new Set(item.data?.map((data) => data?.ShopOrder?.createdAt))
+    ...new Set(item.data?.map((data) => data?.ShopOrder?.createdAt))
   ]
   console.log(uniqueDate)
 
