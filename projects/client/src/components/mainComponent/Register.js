@@ -14,7 +14,6 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const registerUser = async (values, { setStatus, setValues }) => {
-    alert("Submit form!");
     try {
       const response = await axios.post("/auth/register", values, {
         headers: { "Content-Type": "application/json" },

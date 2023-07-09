@@ -18,8 +18,9 @@ const InputEditProduct = () => {
   const [errMsg, setErrMsg] = useState("");
   const [price, setPrice] = useState("");
   const [image, setImage] = useState("");
-  const [showImage, setShowImage] = useState("");
+  const [showImage, setShowImage] = useState(noimage);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [userProductValue, setUserProductValue] = useState("");
   const token = useSelector((state) => state.auth.value);
   const navigate = useNavigate();
   const { id } = useParams();
@@ -27,6 +28,13 @@ const InputEditProduct = () => {
   useEffect(() => {
     axios.get("/category").then((res) => setCategories(res.data.result));
   }, []);
+
+  useEffect(() => {
+    axios
+      .get(`/products/${id}`)
+      .then((res) => setUserProductValue(res.data.data));
+  }, [id]);
+  console.log(userProductValue);
 
   /* formik yup untuk handle value dari input */
   const EditProduct = async (values, { setStatus, setValues }) => {
@@ -38,45 +46,43 @@ const InputEditProduct = () => {
     formData.append("file", image[0]);
 
     try {
-      const responseAdd = axios.patch(`/product/edit-product/${id}`, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      console.log("tetetetete", responseAdd.Promise);
-      if (responseAdd.status) {
-        setValues({
-          name_item: "",
-          category_id: "",
-          product_description: "",
-          price: "",
-          status: false,
+      axios
+        .patch(`/product/edit-product/${id}`, formData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then(() => {
+          setValues({
+            name_item: "",
+            category_id: "",
+            product_description: "",
+            price: "",
+            status: false,
+          });
+          setSelectedCategory("");
+          setPrice("");
+          setIsSuccess(true);
+          setTimeout(() => {
+            navigate("/profile/my-store");
+          }, 3000);
+        })
+        .catch((err) => {
+          console.log(err);
+          setErrMsg(err.response?.data?.message);
         });
-        setSelectedCategory("");
-        setPrice("");
-        navigate("/profile/my-store");
-        setIsSuccess(true);
-      } else {
-        setErrMsg("you cannot edit someone's product");
-      }
     } catch (error) {
       console.log(error);
-      console.log("error", error);
-      if (!error.name?.response) {
-        setErrMsg("No Server Response");
-      } else {
-        setErrMsg(error?.response?.data?.message);
-      }
     }
   };
 
   const formik = useFormik({
     initialValues: {
-      name_item: "",
-      category_id: selectedCategory,
-      product_description: "",
-      price: "",
-      status: false,
+      name_item: userProductValue.name_item || "",
+      category_id: userProductValue.category_id || selectedCategory,
+      product_description: userProductValue.product_description || "",
+      price: userProductValue.price || "",
+      status: userProductValue.status || false,
     },
     onSubmit: EditProduct,
     validationSchema: yup.object().shape({
@@ -141,7 +147,7 @@ const InputEditProduct = () => {
               placeholder="new product"
               name="name_item"
               autoComplete="off"
-              value={formik.values.name_item}
+              defaultValue={userProductValue.name_item}
             />
             <FormErrorMessage className="text-red-500 text-sm font-medium mx-3">
               {formik.errors.name_item}
@@ -158,7 +164,7 @@ const InputEditProduct = () => {
               <select
                 id="categories"
                 className="bg-gray-200  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-strong focus:focus:border-green-strong block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-strong dark:focus:focus:border-green-strong h-10"
-                value={selectedCategory}
+                defaultValue={userProductValue.category_id}
                 onChange={(e) => {
                   setSelectedCategory(e.target.value);
                   formik.setFieldValue("category_id", e.target.value);
@@ -201,7 +207,7 @@ const InputEditProduct = () => {
               placeholder="product description"
               name="product_description"
               autoComplete="off"
-              value={formik.values.product_description}
+              defaultValue={userProductValue.product_description}
             />
             <FormErrorMessage className="text-red-500 text-sm font-medium mx-3">
               {formik.errors.product_description}
@@ -212,7 +218,7 @@ const InputEditProduct = () => {
               type="text"
               className="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-strong focus:border-green-strong block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-strong dark:focus:focus:border-green-strong"
               onChange={handleForm}
-              placeholder="price"
+              placeholder={`Rp${userProductValue.price},00`}
               name="price"
               autoComplete="off"
               value={formik.values.price}
@@ -232,6 +238,7 @@ const InputEditProduct = () => {
             <input
               type="checkbox"
               className="sr-only peer"
+              defaultChecked={userProductValue.status}
               checked={formik.values.status}
               onChange={() => {
                 formik.setFieldValue("status", !formik.values.status);

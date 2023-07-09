@@ -1,6 +1,8 @@
 const { Category } = require("../../models");
+const db = require("../../models");
 
 const editCategory = async (req, res) => {
+  const t = await db.sequelize.transaction();
   try {
     const { id } = req.params;
     const { category_name } = req.body;
@@ -12,6 +14,7 @@ const editCategory = async (req, res) => {
     });
 
     if (!dataCategory) {
+      await t.rollback();
       return res.status(400).json({
         ok: false,
         message: "you have not choose any category yet",
@@ -23,6 +26,7 @@ const editCategory = async (req, res) => {
     });
 
     if (isCategoryExist) {
+      await t.rollback();
       return res.status(400).json({
         ok: false,
         message: "category already exist, please choose one",
@@ -31,12 +35,16 @@ const editCategory = async (req, res) => {
 
     const updateCategory = await Category.update(
       { category_name: category_name },
-      { where: { id: id } }
+      { where: { id: id } },
+      { transaction: t }
     );
+
+    await t.commit();
     res.status(201).json({
       data: updateCategory,
     });
   } catch (error) {
+    await t.rollback();
     console.log(error);
     res.status(500).json({
       ok: false,
@@ -47,25 +55,33 @@ const editCategory = async (req, res) => {
 
 const addCategory = async (req, res) => {
   const { category_name } = req.body;
+  const t = await db.sequelize.transaction();
   try {
     const isCategoryExist = await Category.findOne({
       where: { category_name: category_name },
     });
 
     if (isCategoryExist) {
+      await t.rollback();
       return res.status(400).json({
         ok: false,
         message: "category already exist, please choose one",
       });
     }
 
-    const postCategory = await Category.create({
-      category_name: category_name,
-    });
+    const postCategory = await Category.create(
+      {
+        category_name: category_name,
+      },
+      { transaction: t }
+    );
+
+    await t.commit();
     res.status(201).json({
       data: postCategory,
     });
   } catch (error) {
+    await t.rollback();
     console.log(error);
     res.status(500).json({
       ok: false,
