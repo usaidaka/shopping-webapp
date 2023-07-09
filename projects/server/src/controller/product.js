@@ -1,45 +1,67 @@
 const { Product, User, Category, OrderLine, Cart } = require("../../models");
 const db = require("../../models");
-
-// error edit product belum ke catch di front end
+const fs = require("fs");
 
 const editProduct = async (req, res) => {
   const { id } = req.params;
   const user_id = req.user.userId;
   const data = JSON.parse(req.body.data);
-  const imageURL = req.file.filename;
-
+  const t = await db.sequelize.transaction();
   try {
+    const result = await Product.findOne({
+      where: { user_id: user_id, id: id },
+      attributes: { exclude: ["product_id"] },
+    });
+
     const response = await Product.update(
       {
         name_item: data.name_item,
         user_id: user_id,
         category_id: data.category_id,
         product_description: data.product_description,
-        image_product: `photo-product/${imageURL}`,
         price: data.price,
         status: data.status,
       },
-      { where: { id: id, user_id: user_id } }
+      { where: { id: id, user_id: user_id } },
+      { transaction: t }
     );
 
-    const result = await Product.findOne({
-      where: { user_id: user_id, id: id },
-      attributes: { exclude: ["product_id"] },
-    });
+    if (req.file) {
+      const newImage = req.file.filename;
+      await Product.update(
+        {
+          image_product: `photo-product/${newImage}`,
+        },
+        { where: { id: id, user_id: user_id } },
+        { transaction: t }
+      );
+
+      const realImageURL = result.getDataValue("image_product").split("/")[1];
+      if (realImageURL) {
+        fs.unlinkSync(`${__dirname}/../../Public/product/${realImageURL}`);
+      }
+    }
 
     if (!result && response[0] === 0) {
+      await t.rollback();
       return res.status(400).json({
         ok: false,
         message: "you cannot edit someone's product",
       });
     }
 
+    const lastResult = await Product.findOne({
+      where: { user_id: user_id, id: id },
+      attributes: { exclude: ["product_id"] },
+    });
+
+    await t.commit();
     res.status(201).json({
       ok: true,
-      data: result,
+      data: lastResult,
     });
   } catch (error) {
+    await t.rollback();
     res.status(500).json({
       ok: false,
       message: error.message,
@@ -51,8 +73,10 @@ const createProduct = async (req, res) => {
   const data = JSON.parse(req.body.data);
   console.log("data", data);
   const imageURL = req.file.filename;
+  const t = await db.sequelize.transaction();
   try {
     if (!data) {
+      await t.rollback();
       return res.status(400).send({
         message: "data not found",
       });
@@ -66,30 +90,32 @@ const createProduct = async (req, res) => {
     });
 
     if (!userData) {
+      await t.rollback();
       return res.status(400).send({
         message: "user not found",
       });
     }
 
-    //bisa bikin error handling untuk ngecek apakah category yang di input user exist
+    const result = await Product.create(
+      {
+        user_id: userData.id,
+        category_id: Number(data.category_id),
+        name_item: data.name_item,
+        product_description: data.product_description,
+        image_product: `photo-product/${imageURL}`,
+        price: Number(data.price),
+        status: data.status,
+      },
+      { transaction: t }
+    );
 
-    const result = await Product.create({
-      user_id: userData.id,
-      category_id: Number(data.category_id),
-      name_item: data.name_item,
-      product_description: data.product_description,
-      image_product: `photo-product/${imageURL}`,
-      price: Number(data.price),
-      status: data.status,
-    });
-
+    await t.commit();
     res.status(200).send({
       message: "success add a product",
       data: result,
     });
   } catch (error) {
-    const data = JSON.parse(req.body.data);
-    console.log(data);
+    await t.rollback();
     res.status(500).send({
       message: "server error",
       error: error.message,
@@ -108,7 +134,7 @@ const getProducts = async (req, res) => {
 
   try {
     const where = {
-      status: true
+      status: true,
     };
     if (pagination.search) {
       where.name_item = {
@@ -194,13 +220,14 @@ const getProductById = async (req, res) => {
 };
 
 const getUserProduct = async (req, res) => {
-  const status = req.query.status === "true" 
+  const status = req.query.status === "true";
   const user_id = req.user.userId;
   try {
     const result = await Product.findAll({
-      where: { 
+      where: {
         user_id: user_id,
-        status: status },
+        status: status,
+      },
       attributes: { exclude: ["product_id"] },
     });
 
@@ -227,15 +254,31 @@ const getUserProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
   const user_id = req.user.userId;
   const { id } = req.params;
-  console.log(id);
+  const t = await db.sequelize.transaction();
+
   try {
-    const productData = await Product.destroy({
+    const dataProduct = await Product.findOne({
       where: { id: id, user_id: user_id },
     });
-    if (!productData) {
+
+    const productData = await Product.destroy(
+      {
+        where: { id: id, user_id: user_id },
+      },
+      { transaction: t }
+    );
+    if (!dataProduct) {
+      await t.rollback();
       return res.status(400).json({
         ok: false,
         message: "you cannot delete someone's product",
+      });
+    }
+    if (!productData) {
+      await t.rollback();
+      return res.status(400).json({
+        ok: false,
+        message: "your product has been deleted",
       });
     }
     const isProductInCartExist = await Cart.findOne({
@@ -243,7 +286,10 @@ const deleteProduct = async (req, res) => {
     });
 
     if (isProductInCartExist) {
-      await Cart.destroy({ where: { product_id: id, user_id: user_id } });
+      await Cart.destroy(
+        { where: { product_id: id, user_id: user_id } },
+        { transaction: t }
+      );
     }
 
     const isProductInOrderLine = await OrderLine.findOne({
@@ -251,17 +297,29 @@ const deleteProduct = async (req, res) => {
     });
 
     if (isProductInOrderLine) {
-      await isProductInOrderLine.destroy({
-        where: { product_id: id },
-      });
+      await isProductInOrderLine.destroy(
+        {
+          where: { product_id: id },
+        },
+        { transaction: t }
+      );
     }
 
+    const realImageURL = dataProduct
+      .getDataValue("image_product")
+      .split("/")[1];
+    if (realImageURL) {
+      fs.unlinkSync(`${__dirname}/../../Public/product/${realImageURL}`);
+    }
+
+    await t.commit();
     res.status(200).json({
       ok: true,
       data: productData,
     });
   } catch (error) {
     console.log(error);
+    await t.rollback();
     res.status(500).json({
       ok: false,
       message: error.message,

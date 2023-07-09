@@ -3,6 +3,7 @@ const { User, Cart, Product } = require("../../models");
 const addCart = async (req, res) => {
   const user_id = req.user.userId;
   const { product_id, qty } = req.body;
+  const t = await db.sequelize.transaction();
 
   try {
     const isCartExist = await Cart.findOne({
@@ -19,8 +20,10 @@ const addCart = async (req, res) => {
           product_id: product_id,
           qty: Number(qty),
         },
-        { where: { user_id: user_id, product_id: product_id } }
+        { where: { user_id: user_id, product_id: product_id } },
+        { transaction: t }
       );
+      await t.commit();
       return res.status(201).json({
         ok: true,
         message:
@@ -29,17 +32,23 @@ const addCart = async (req, res) => {
       });
     }
 
-    const result = await Cart.create({
-      user_id: user_id,
-      product_id: product_id,
-      qty: Number(qty),
-    });
+    const result = await Cart.create(
+      {
+        user_id: user_id,
+        product_id: product_id,
+        qty: Number(qty),
+      },
+      { transaction: t }
+    );
+
+    await t.commit();
     res.status(201).json({
       ok: true,
       message: "add to cart successfully",
       data: result,
     });
   } catch (error) {
+    await t.rollback();
     console.log(error);
     res.status(500).json({
       ok: false,
@@ -59,13 +68,13 @@ const getUserCart = async (req, res) => {
 
     let total = 0;
     for (const item of result) {
-      total += (item.Product.price*item.qty);
+      total += item.Product.price * item.qty;
     }
 
     res.json({
       ok: true,
       message: result,
-      total
+      total,
     });
   } catch (error) {
     console.log(error);
@@ -79,11 +88,16 @@ const getUserCart = async (req, res) => {
 const cancelCart = async (req, res) => {
   const user_id = req.user.userId;
   const { id } = req.params;
+  const t = await db.sequelize.transaction();
   try {
-    const cartData = await Cart.destroy({
-      where: { id: id, user_id: user_id },
-    });
+    const cartData = await Cart.destroy(
+      {
+        where: { id: id, user_id: user_id },
+      },
+      { transaction: t }
+    );
     if (!id) {
+      await t.rollback();
       return res.status(400).json({
         ok: false,
         message: "product cart not found",
@@ -91,6 +105,7 @@ const cancelCart = async (req, res) => {
     }
 
     if (!user_id) {
+      await t.rollback();
       return res.status(400).json({
         ok: false,
         message: "user not found",
@@ -98,17 +113,20 @@ const cancelCart = async (req, res) => {
     }
 
     if (!cartData) {
+      await t.rollback();
       return res.status(400).json({
         ok: false,
         message: "you cannot delete someone's cart",
       });
     }
 
+    await t.commit();
     res.status(200).json({
       ok: true,
       data: cartData,
     });
   } catch (error) {
+    await t.rollback();
     console.log(error);
     res.status(500).json({
       ok: false,
