@@ -1,4 +1,5 @@
 const routerOrderLine = require("express").Router();
+const orderline = require("../../models/orderline");
 const orderLineController = require("../controller/orderLine");
 
 // middle ware
@@ -12,5 +13,6 @@ routerOrderLine.get(
 );
 
 routerOrderLine.get("/order-line/top-selling", orderLineController.topSelling);
+routerOrderLine.get("/order-line/top-selling/:id", orderLineController.topSellingByCategory)
 
 module.exports = routerOrderLine;

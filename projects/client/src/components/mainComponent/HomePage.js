@@ -17,10 +17,6 @@ const HomePage = () => {
     });
   }, []);
 
-  // const uniqueCategories = [
-  //   ...new Set(categories.result?.map((category) => category?.Category?.category_name)),
-  // ];
-
   function onClickCategory(cat) {
     setGetByCategory(cat);
   }
@@ -47,24 +43,18 @@ const HomePage = () => {
           onChange={(e) => handleSearch(e.target.value)}
         />
       </form>
-      <header>
-        <div className="flex justify-between items-end mt-2 lg:grid lg:grid-cols-2">
-          <h1 className="text-md font-bold lg:text-center font-">
+      <header className="flex justify-center">
+        <div className="flex w-full mt-4 lg:w-[800px]">
+          <h1 className="text-md font-bold text-lg">
             Top Selling Product
           </h1>
-          <Link
-            to="/category"
-            className="text-sm lg:text-center hover:text-yellow-active transition-all flex justify-center"
-          >
-            See All
-          </Link>
         </div>
       </header>
       <div>
         <TopSellingProduct />
       </div>
       <div className="w-auto flex justify-center">
-        <div className="flex overflow-x-auto gap-[10px] mt-[10px] mb-[20px] no-scrollbar">
+        <div className="flex overflow-x-auto gap-2.5 mt-8 no-scrollbar">
           <button
             onClick={() => {
               onClickCategory(``);
@@ -86,7 +76,7 @@ const HomePage = () => {
           ))}
         </div>
       </div>
-      <div className="flex w-full gap-2 mx-auto mb-[20px] lg:w-auto justify-center ">
+      <div className="flex w-full gap-2 mx-auto my-8 lg:w-auto justify-center ">
         <div>
           <select
             id="sortby"

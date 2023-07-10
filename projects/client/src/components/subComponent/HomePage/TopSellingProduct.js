@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Carousel } from "flowbite-react";
 import { Link } from "react-router-dom";
 import axios from "../../../api/axios";
+import toRupiah from "@develoka/angka-rupiah-js";
+import { BuildingStorefrontIcon, TagIcon } from "@heroicons/react/24/outline";
 
 const TopSellingProduct = () => {
   const [products, setProducts] = useState([]);
@@ -44,35 +46,49 @@ const TopSellingProduct = () => {
             </div>
           ) : (
             products.map((product) => (
+              <Link to={`/products/${product?.Product?.id}`} className="bg-inherit">
               <div key={product?.Product?.id}>
                 <div
                   key={product?.Product?.id}
-                  className="w-60 h-[100px]  grid grid-cols-4 grid-rows-3 mx-auto shadow-lg rounded-md lg:w-[800px] transition-all hover:bg-slate-200"
+                  className="w-60 h-[120px]  grid grid-cols-4 grid-rows-4 mx-auto shadow-lg rounded-md lg:w-[800px] transition-all hover:bg-slate-200"
                 >
-                  <div className="justify-center flex row-span-3 items-center col-span-1 bg-inherit">
+                  <div className="justify-center flex row-span-4 items-center col-span-1 bg-inherit">
                     <img
                       src={product?.Product?.image_product}
                       alt=""
-                      className="object-contain h-[85px] bg-inherit"
+                      className="object-contain h-[120px] bg-inherit"
                     ></img>
                   </div>
-                  <div className="col-span-3 bg-inherit">
+                  <div className=" row-span-1 col-span-3 bg-inherit">
                     <p className="font-bold whitespace-nowrap overflow-hidden text-ellipsis py-auto px-[10px] bg-inherit">
                       {product?.Product?.name_item}
                     </p>
                   </div>
-                  <div className="col-span-3 bg-inherit">
+                  <div className="row-span-1 col-span-3 bg-inherit">
                     <p className="whitespace-nowrap overflow-hidden text-ellipsis py-auto px-[10px] bg-inherit">
                       {product?.Product?.product_description}
                     </p>
                   </div>
-                  <div className="col-span-3 bg-inherit">
-                    <p className="font-bold py-auto text-green-400 px-[10px] bg-inherit">
-                      {product?.Product?.price}
+                  <div className="flex row-span-1 col-span-3 bg-inherit">
+                  <BuildingStorefrontIcon className="w-6 bg-inherit text-gray-500 ml-[10px]"/>
+                    <p className="whitespace-nowrap overflow-hidden text-ellipsis py-auto px-[10px] bg-inherit text-gray-500">
+                      {product?.Product?.User?.store_name}
                     </p>
+                  </div>
+                  <div className="row-span-1 col-span-2 bg-inherit">
+                    <p className="font-bold py-auto text-green-400 px-[10px] bg-inherit">
+                      {toRupiah(product?.Product?.price)}
+                    </p>
+                  </div>
+                  <div className="flex justify-end col-span-1 bg-inherit">
+                    <TagIcon className="w-6 text-gray-500 bg-inherit" />
+                    <div className="py-auto bg-inherit px-[10px] text-gray-500">
+                      {product?.count}
+                    </div>
                   </div>
                 </div>
               </div>
+              </Link>
             ))
           )}
         </Carousel>
