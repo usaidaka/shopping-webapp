@@ -116,14 +116,12 @@ export default function Navbar() {
             >
               {totalCart === 0 ? null : (
                 <h1
-                  className={`absolute ml-5 w-5 h-5 rounded-full bg-red-500 ${
-                    totalCart.length === 0 ? "hidden" : "flex"
-                  } justify-center items-center text-sm`}
+                  className={`absolute ml-5 w-5 h-5 rounded-full bg-red-500 flex justify-center items-center text-sm`}
                 >
                   {totalCart}
                 </h1>
               )}
-
+              
               <ShoppingCartIcon />
             </Link>
             <button

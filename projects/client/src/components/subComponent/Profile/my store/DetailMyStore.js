@@ -1,4 +1,4 @@
-import { TrashIcon } from "@heroicons/react/24/outline";
+import { TrashIcon, TagIcon } from "@heroicons/react/24/outline";
 import toRupiah from "@develoka/angka-rupiah-js";
 
 import React, { useEffect, useState } from "react";
@@ -51,13 +51,15 @@ const DetailMyStore = () => {
     setActive(value);
   };
 
+  const orderedData = userProducts?.sort((a,b) => b.OrderLines.length - a.OrderLines.length)
+
   return (
     <div className="lg:col-span-3 lg:mr-10">
       <div>
-        <h1 className="font-bold mt-4">Store Product</h1>
+        <h1 className="mx-4 font-bold mt-4">Store Products</h1>
       </div>
       {/* FILTER ACTIVE DAN DEACTIVE */}
-      <div>
+      <div className="mx-4 my-2">
         <select
           id="sortby"
           className="h-[32x] w-24 rounded-[6px] lg:w-[400px] border-green-soft"
@@ -73,7 +75,7 @@ const DetailMyStore = () => {
       </div>
       {/* DATE PICKER */}
       {active === "true"
-        ? userProducts.map((item) => (
+        ? orderedData.map((item) => (
             <div key={item.id}>
               <div>
                 <div className="drop-shadow-md mx-3 h-[130px] my-2 grid grid-cols-4 items-center p-2 rounded-lg bg-green-footer">
@@ -100,6 +102,10 @@ const DetailMyStore = () => {
                             {item.name_item}
                           </Link>
                         </h1>
+                        <div className="flex bg-inherit text-gray-500">
+                          <TagIcon className="mr-1 w-6 bg-inherit"/>
+                          <div className="bg-inherit">{item.OrderLines?.length}</div>
+                        </div>
                       </div>
                       <h1 className="text-xs bg-inherit lg:hidden">
                         {item.product_description}...
@@ -163,6 +169,10 @@ const DetailMyStore = () => {
                             {item.name_item}
                           </Link>
                         </h1>
+                        <div className="flex bg-inherit text-gray-500">
+                          <TagIcon className="mr-1 w-6 bg-inherit"/>
+                          <div className="bg-inherit">{item.OrderLines?.length}</div>
+                        </div>
                       </div>
                       <h1 className="text-xs text-gray-600 bg-inherit lg:hidden">
                         {item.product_description}...

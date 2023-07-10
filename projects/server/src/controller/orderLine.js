@@ -1,4 +1,4 @@
-const { OrderLine, ShopOrder, Product } = require("../../models");
+const { OrderLine, ShopOrder, Product, User } = require("../../models");
 const db = require("../../models");
 const dayjs = require("dayjs");
 
@@ -50,7 +50,13 @@ const getOrderLine = async (req, res) => {
 const topSelling = async (req, res) => {
   try {
     const resultTopSelling = await OrderLine.findAll({
-      include: [Product],
+      include: [{
+        model: Product,
+        include: {
+          model: User,
+          attributes: ["store_name"]
+        }
+      }],
       attributes: [
         "product_id",
         [db.Sequelize.fn("COUNT", db.Sequelize.col("product_id")), "count"],
@@ -74,4 +80,42 @@ const topSelling = async (req, res) => {
   }
 };
 
-module.exports = { getOrderLine, topSelling };
+const topSellingByCategory = async (req, res) => {
+  const {id} = req.params
+
+  try {
+    const resultTopSelling = await OrderLine.findAll({
+      include: [{
+        model: Product,
+        where: {
+          category_id: Number(id)},
+        include: {
+          model: User,
+          attributes: ["store_name"],
+        },
+      },
+    ],
+      attributes: [
+        "product_id",
+        [db.Sequelize.fn("COUNT", db.Sequelize.col("product_id")), "count"],
+      ],
+      group: ["product_id"],
+      order: [
+        [db.Sequelize.fn("COUNT", db.Sequelize.col("product_id")), "DESC"],
+      ],
+      limit: 5,
+    });
+    res.json({
+      ok: true,
+      data: resultTopSelling,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      ok: false,
+      message: error.message,
+    });
+  }
+};
+
+module.exports = { getOrderLine, topSelling, topSellingByCategory };

@@ -166,6 +166,10 @@ const getProducts = async (req, res) => {
           model: OrderLine,
           attributes: ["product_id"],
         },
+        {
+          model: User,
+          attributes: ["store_name"]
+        }
       ],
       where,
       limit: pagination.perPage,
@@ -197,6 +201,12 @@ const getProductById = async (req, res) => {
     const result = await Product.findOne({
       where: { id: Number(id) },
       attributes: { exclude: ["product_id"] },
+      include: [
+        { 
+          model: User,
+          attributes: ["store_name"]
+        }
+      ]
     });
 
     if (!result) {
@@ -228,6 +238,14 @@ const getUserProduct = async (req, res) => {
         user_id: user_id,
         status: status,
       },
+      include: [{
+        model: OrderLine,
+        attributes: [
+          "product_id",
+      ]
+      }, {
+        model: Category,
+      }],
       attributes: { exclude: ["product_id"] },
     });
 

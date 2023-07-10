@@ -103,7 +103,7 @@ const SingleProduct = () => {
           <img src={`${item.image_product}`} alt="" />
         </div>
         <div className="row-span-1 lg:bg-green-footer lg:w-full lg:p-6 lg:gap-2">
-          <p className="text-sm font-bold lg:bg-inherit lg:text-2xl">
+          <p className="text-sm font-bold lg:bg-inherit lg:text-2xl lg:my-auto">
             {item.name_item}
           </p>
           <p className="text-xs lg:bg-inherit lg:mt-4 lg:text-xl">
