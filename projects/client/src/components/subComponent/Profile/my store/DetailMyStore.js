@@ -27,9 +27,8 @@ const DetailMyStore = () => {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
-          console.log(res);
           axios
-            .get("/products/user", {
+            .get(`/products/user?status=${active}`, {
               headers: { Authorization: `Bearer ${token}` },
             })
             .then((res) => setItems(res.data));
@@ -51,7 +50,9 @@ const DetailMyStore = () => {
     setActive(value);
   };
 
-  const orderedData = userProducts?.sort((a,b) => b.OrderLines.length - a.OrderLines.length)
+  const orderedData = userProducts?.sort(
+    (a, b) => b.OrderLines.length - a.OrderLines.length
+  );
 
   return (
     <div className="lg:col-span-3 lg:mr-10">
@@ -103,8 +104,10 @@ const DetailMyStore = () => {
                           </Link>
                         </h1>
                         <div className="flex bg-inherit text-gray-500">
-                          <TagIcon className="mr-1 w-6 bg-inherit"/>
-                          <div className="bg-inherit">{item.OrderLines?.length}</div>
+                          <TagIcon className="mr-1 w-6 bg-inherit" />
+                          <div className="bg-inherit">
+                            {item.OrderLines?.length}
+                          </div>
                         </div>
                       </div>
                       <h1 className="text-xs bg-inherit lg:hidden">
@@ -170,8 +173,10 @@ const DetailMyStore = () => {
                           </Link>
                         </h1>
                         <div className="flex bg-inherit text-gray-500">
-                          <TagIcon className="mr-1 w-6 bg-inherit"/>
-                          <div className="bg-inherit">{item.OrderLines?.length}</div>
+                          <TagIcon className="mr-1 w-6 bg-inherit" />
+                          <div className="bg-inherit">
+                            {item.OrderLines?.length}
+                          </div>
                         </div>
                       </div>
                       <h1 className="text-xs text-gray-600 bg-inherit lg:hidden">

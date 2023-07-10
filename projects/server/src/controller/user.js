@@ -121,7 +121,7 @@ const login = async (req, res) => {
     if (!user) {
       return res.status(401).json({
         ok: false,
-        message: "user unauthorized",
+        message: "user not found",
       });
     }
 
@@ -144,7 +144,7 @@ const login = async (req, res) => {
 
     res.json({
       ok: true,
-      message: "welcome to your blog",
+      message: "welcome to your store",
       isAccountExist: user,
       accessToken,
     });
@@ -195,6 +195,9 @@ const getUserInformation = async (req, res) => {
 //       const isUserExist = await User.destroy({
 //         where: { id: user_id },
 //       });
+//       await Cart.destroy({
+//         include: { model: Product, where: { user_id: user_id } },
+//       });
 //       if (!isUserExist) {
 //         return res.status(400).json({
 //           ok: false,
@@ -239,48 +242,11 @@ const getUserInformation = async (req, res) => {
 //       const destroyCart = await Cart.destroy({
 //         where: { user_id: user_id },
 //       });
-//       await Cart.destroy({
-//         include: { model: Product, where: { user_id: user_id } },
-//       });
+
 //       if (!destroyCart) {
 //         return res.status(400).json({
 //           ok: false,
 //           message: "destroy user's cart failed",
-//         });
-//       }
-//     }
-
-//     const findUserShopOrder = await ShopOrder.findOne({ user_id: user_id });
-
-//     const order_id = findUserShopOrder.id;
-//     console.log("order_id", order_id);
-
-//     const isOrderLineExist = await OrderLine.findOne({
-//       where: { order_id: order_id },
-//     });
-//     console.log("isOrderLineExist", isOrderLineExist);
-//     if (isOrderLineExist) {
-//       const destroyOrderLineExist = await OrderLine.destroy({
-//         where: { order_id: Number(order_id) },
-//       });
-//       if (!destroyOrderLineExist) {
-//         return res.status(400).json({
-//           ok: false,
-//           message: "destroy user's order line failed",
-//         });
-//       }
-//     }
-//     const isShopOrderExist = await ShopOrder.findOne({
-//       where: { user_id: user_id },
-//     });
-//     if (isShopOrderExist) {
-//       const destroyShopOrder = await ShopOrder.destroy({
-//         where: { user_id: user_id },
-//       });
-//       if (!destroyShopOrder) {
-//         return res.status(400).json({
-//           ok: false,
-//           message: "destroy user's shop order failed",
 //         });
 //       }
 //     }

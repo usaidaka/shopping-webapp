@@ -123,7 +123,7 @@ const SingleProduct = () => {
               subtotal: {toRupiah(item.price * inputCartQty)}
             </h1>
             <h1 className="font-bold text-base lg:bg-inherit lg:hidden">
-              {toRupiah(item.price * countCart)}
+              {toRupiah(item.price * inputCartQty)}
             </h1>
           </div>
           <div className="col-span-1 flex justify-center gap-4 items-center lg:grid lg:bg-inherit">
@@ -131,12 +131,12 @@ const SingleProduct = () => {
               <button
                 className="w-10 block bg-green-strong rounded-lg"
                 onClick={() => {
-                  if (countCart > 0 || inputCartQty > 0) {
+                  if (countCart > 0 && inputCartQty > 0) {
                     dispatch(decrement());
                     setInputCartQty(inputCartQty - 1);
                   } else {
                     dispatch(setCountCart(0));
-                    setInputCartQty(inputCartQty);
+                    setInputCartQty(0);
                   }
                 }}
               >

@@ -8,18 +8,17 @@ const ProfileDetail = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
-  // const handleCloseAccount = async () => {
-  //   if (window.confirm("are you sure wanna close your account?") === true) {
-  //     navigate("/login");
-  //      localStorage.removeItem("token");
-  //     await axios.delete("/auth/delete-account", {
-  //       headers: { Authorization: `Bearer ${token}` },
-  //     });
-
-  //   } else {
-  //     window.alert("thank you, we glad you still on our board");
-  //   }
-  // };
+  const handleCloseAccount = async () => {
+    if (window.confirm("are you sure wanna close your account?") === true) {
+      navigate("/login");
+      localStorage.removeItem("token");
+      await axios.delete("/auth/delete-account", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+    } else {
+      window.alert("thank you, we glad you still on our board");
+    }
+  };
 
   useEffect(() => {
     axios
@@ -45,11 +44,11 @@ const ProfileDetail = () => {
               {userData.store_name}
             </h1>
           </div>
-          {/* <div className="bg-red-500 flex flex-col ml-8 mt-5 mb-5 justify-center mx-auto w-full h-10 rounded-lg">
+          <div className="bg-red-500 flex flex-col ml-8 mt-5 mb-5 justify-center mx-auto w-full h-10 rounded-lg">
             <button className="font-semibold" onClick={handleCloseAccount}>
               close account
             </button>
-          </div> */}
+          </div>
         </div>
       </div>
     </div>
