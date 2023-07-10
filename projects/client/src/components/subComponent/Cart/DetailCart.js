@@ -14,7 +14,7 @@ const DetailCart = () => {
   const dispatch = useDispatch();
   const totalCart = useSelector((state) => state.cart.value);
   const [items, setItems] = useState("");
-  const [count, setCount] = useState(0);
+  
 
   const token = localStorage.getItem("token");
 
@@ -78,15 +78,10 @@ const DetailCart = () => {
                 <div className="drop-shadow-2xl mx-3 h-[120px] my-2 grid grid-cols-4 items-center p-2 rounded-lg bg-green-footer lg:w-full">
                   <div className="col-span-1 gap-2 flex flex-row justify-center items-center bg-inherit">
                     <div className="flex items-center gap-2 bg-inherit lg:justify-center lg:ml-10">
-                      <Checkbox
+                      <p
                         id="remember"
-                        className="bg-inherit lg:mr-10 border-2 border-green-strong"
-                        onClick={(e) =>
-                          e.target.checked
-                            ? setCount(count + 1)
-                            : setCount(count - 1)
-                        }
-                      />
+                        className="bg-inherit lg:mr-10 "
+                      ></p>
                     </div>
                     <img
                       src={item.Product?.image_product}

@@ -2,6 +2,7 @@ import {
   ArrowLeftIcon,
   MinusIcon,
   PlusIcon,
+  BuildingStorefrontIcon
 } from "@heroicons/react/24/outline";
 import toRupiah from "@develoka/angka-rupiah-js";
 import React, { useEffect, useState } from "react";
@@ -19,7 +20,7 @@ const SingleProduct = () => {
 
   useEffect(() => {
     axios.get(`/products/${id}`).then((res) => setItem(res.data.data));
-  }, []);
+  }, [id]);
 
   const handleAddToCart = async () => {
     try {
@@ -83,14 +84,17 @@ const SingleProduct = () => {
           <img src={`${item.image_product}`} alt="" />
         </div>
         <div className="row-span-1 lg:bg-green-footer lg:w-full lg:p-6 lg:gap-2">
-          <p className="text-sm font-bold lg:bg-inherit lg:text-2xl">
+          <p className="text-sm font-bold lg:bg-inherit lg:text-2xl lg:my-auto">
             {item.name_item}
           </p>
           <p className="text-xs lg:bg-inherit lg:mt-4 lg:text-xl">
             {item.product_description}
           </p>
-          <p className="text-xs lg:bg-inherit lg:mt-4 lg:text-xl text-gray-500">
+          <div className="w-auto flex lg:mt-4 bg-inherit">
+          <BuildingStorefrontIcon className="w-6 bg-inherit text-gray-500"/>
+          <p className="text-xs lg:bg-inherit lg:my-auto lg:ml-[10px] lg:text-xl text-gray-500">
             {item.User?.store_name}</p>
+          </div>
           <p className="hidden lg:block lg:mt-20 lg:bg-inherit lg:text-3xl lg:font-bold   lg:text-green-strong">
             {toRupiah(item.price)}
           </p>

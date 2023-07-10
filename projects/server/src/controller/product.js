@@ -238,6 +238,14 @@ const getUserProduct = async (req, res) => {
         user_id: user_id,
         status: status,
       },
+      include: [{
+        model: OrderLine,
+        attributes: [
+          "product_id",
+      ]
+      }, {
+        model: Category,
+      }],
       attributes: { exclude: ["product_id"] },
     });
 

@@ -1,10 +1,10 @@
-import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { BuildingStorefrontIcon, TagIcon } from "@heroicons/react/24/outline";
 import React from "react";
 import { useState, useEffect } from "react";
 import axios from 'axios'
 import { Carousel } from "flowbite-react";
 import { Pagination } from "flowbite-react";
-
+import cateogryIllustration from "../../assets/3487927.png"
 import toRupiah from "@develoka/angka-rupiah-js";
 import { Link } from "react-router-dom";
 
@@ -99,7 +99,11 @@ const Category = () => {
           <option value="desc">Descending</option>
         </select>
       </form>
-    </div>
+      <div className="w-fulll flex justify-center mt-16 mb-8 font-bold">Please Select A Category</div>
+      <div className="w-full flex justify-center mb-24">
+        <img src={cateogryIllustration} alt="Select a Category" className="w-80 h-80"/>
+      </div>
+      </div>
     )
   }
 
@@ -154,10 +158,10 @@ const Category = () => {
           <option value="desc">Descending</option>
         </select>
       </form>
-      <div className="mt-10 font-bold">
+      <div className="mt-10 font-bold ml-40">
         Top Selling Products
       </div>
-      {topProducts.length === 0 ? (<div>No products in this category are sold</div>) : (
+      {topProducts.length === 0 ? (<div className="ml-40 mt-5">No products in this category are sold</div>) : (
       <div className="flex justify-center items-center mt-0 w-full h-52">
         <Carousel theme={customTheme}>
           {isTopSellingExist === null ? (
@@ -191,7 +195,8 @@ const Category = () => {
                       {product?.Product?.product_description}
                     </p>
                   </div>
-                  <div className="row-span-1 col-span-3 bg-inherit">
+                  <div className="flex row-span-1 col-span-3 bg-inherit">
+                    <BuildingStorefrontIcon className="w-6 bg-inherit text-gray-500 ml-[10px]"/>
                     <p className="whitespace-nowrap overflow-hidden text-ellipsis py-auto px-[10px] bg-inherit text-gray-500">
                       {product?.Product?.User?.store_name}
                     </p>
@@ -201,10 +206,11 @@ const Category = () => {
                       {toRupiah(product?.Product?.price)}
                     </p>
                   </div>
-                  <div className="col-span-1 bg-inherit">
-                    <p className="text-right py-auto bg-inherit px-[10px] text-gray-500">
-                      {`sold ${product?.count}`}
-                    </p>
+                  <div className="flex justify-end col-span-1 bg-inherit">
+                    <TagIcon className="w-6 text-gray-500 bg-inherit" />
+                    <div className="py-auto bg-inherit px-[10px] text-gray-500">
+                      {product?.count}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -214,8 +220,8 @@ const Category = () => {
         </Carousel>
       </div>
       )}
-      <div className="mt-10 font-bold">Products</div>
-      {productsByCategory.data?.length === 0 ? (<div>No products to be displayed</div>) : (
+      <div className="mt-10 mb-5 font-bold ml-40">Products</div>
+      {productsByCategory.data?.length === 0 ? (<div className="ml-40">No products to be displayed</div>) : (
       <>
       <div className="w-full lg:w-auto flex gap-[22px] flex-wrap justify-center mx-auto after:w-[160px] lg:after:w-[500px] mb-20">
         {productsByCategory.data?.map((product) => (
@@ -245,7 +251,8 @@ const Category = () => {
                     {product.product_description}
                   </p>
                 </div>
-                <div className="row-span-1 w-[160px] lg:row-span 1 lg:col-span-2 lg:w-auto bg-inherit">
+                <div className="flex row-span-1 w-[160px] lg:row-span 1 lg:col-span-2 lg:w-auto bg-inherit">
+                  <BuildingStorefrontIcon className="w-6 bg-inherit text-gray-500 ml-[10px]"/>
                   <p className="px-[10px] whitespace-nowrap overflow-hidden text-ellipsis text-gray-500 py-auto lg:mt-1 bg-inherit">
                     {product.User?.store_name}</p>
                 </div>

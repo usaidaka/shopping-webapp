@@ -3,6 +3,7 @@ import { Carousel } from "flowbite-react";
 import { Link } from "react-router-dom";
 import axios from "../../../api/axios";
 import toRupiah from "@develoka/angka-rupiah-js";
+import { BuildingStorefrontIcon, TagIcon } from "@heroicons/react/24/outline";
 
 const TopSellingProduct = () => {
   const [products, setProducts] = useState([]);
@@ -68,7 +69,8 @@ const TopSellingProduct = () => {
                       {product?.Product?.product_description}
                     </p>
                   </div>
-                  <div className="row-span-1 col-span-3 bg-inherit">
+                  <div className="flex row-span-1 col-span-3 bg-inherit">
+                  <BuildingStorefrontIcon className="w-6 bg-inherit text-gray-500 ml-[10px]"/>
                     <p className="whitespace-nowrap overflow-hidden text-ellipsis py-auto px-[10px] bg-inherit text-gray-500">
                       {product?.Product?.User?.store_name}
                     </p>
@@ -78,10 +80,11 @@ const TopSellingProduct = () => {
                       {toRupiah(product?.Product?.price)}
                     </p>
                   </div>
-                  <div className="col-span-1 bg-inherit">
-                    <p className="text-right py-auto bg-inherit px-[10px] text-gray-500">
-                      {`sold ${product?.count}`}
-                    </p>
+                  <div className="flex justify-end col-span-1 bg-inherit">
+                    <TagIcon className="w-6 text-gray-500 bg-inherit" />
+                    <div className="py-auto bg-inherit px-[10px] text-gray-500">
+                      {product?.count}
+                    </div>
                   </div>
                 </div>
               </div>
