@@ -18,7 +18,11 @@ import MyTransaction from "./components/mainComponent/MyTransaction";
 import StoreTransaction from "./components/mainComponent/StoreTransaction";
 import MyStore from "./components/mainComponent/MyStore";
 import Cart from "./components/subComponent/Cart/DetailCart";
+
 import InputAddress from "./components/mainComponent/InputAddress";
+import { setTotalCart } from "./thunk/cartSlice";
+import axios from "./api/axios";
+import { setDetails } from "./thunk/countCartSlice";
 
 function App() {
   const dispatch = useDispatch();
@@ -26,8 +30,20 @@ function App() {
     const token = localStorage.getItem("token");
     if (token) {
       dispatch(setTokenAccess(token));
+      axios
+        .get("/cart", { headers: { Authorization: `Bearer ${token}` } })
+        .then((res) => {
+          dispatch(setTotalCart(res.data.message.length));
+          const mapCart = res.data.message.map((cart) => ({
+            product_id: cart.product_id,
+            qty: cart.qty,
+          }));
+          for (let cartItem of mapCart) {
+            dispatch(setDetails(cartItem));
+          }
+        });
     }
-  }, []);
+  }, [dispatch]);
 
   return (
     <Router>

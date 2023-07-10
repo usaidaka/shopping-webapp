@@ -52,7 +52,7 @@ const InputCreateProduct = () => {
       setIsSuccess(true);
       setTimeout(() => {
         navigate("/profile/my-store");
-      }, 3000);
+      }, 2000);
     } catch (error) {
       console.log(error);
       if (!error.response) {

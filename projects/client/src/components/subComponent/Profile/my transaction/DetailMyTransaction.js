@@ -20,22 +20,24 @@ const DetailMyTransaction = () => {
 
   useEffect(() => {
     axios
-      .get(`/order-shop?startDate=${startDate}&endDate=${endDate}`, { headers: { Authorization: `Bearer ${token}` } })
+      .get(`/order-shop?startDate=${startDate}&endDate=${endDate}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
       .then((res) => setItem(res.data));
-  }, [startDate, endDate]);
+  }, [startDate, endDate, token]);
 
   console.log("item", item);
   if (!item) {
     return <p></p>;
   }
 
-  console.log(startDate)
-  console.log(endDate)
+  console.log(startDate);
+  console.log(endDate);
 
   const uniqueDate = [
-    ...new Set(item.result?.map((result) => result?.createdAt))
-  ]
-  console.log(uniqueDate)
+    ...new Set(item.result?.map((result) => result?.createdAt)),
+  ];
+  console.log(uniqueDate);
   return (
     <div className="lg:col-span-3 lg:mr-10">
       <div>
@@ -67,29 +69,6 @@ const DetailMyTransaction = () => {
           Total Transaction
         </h1>
         <div className="pl-8 drop-shadow-2xl mx-3 h-[130px] my-2 grid grid-cols-4 items-center p-2 rounded-lg bg-green-footer justify-center">
-          {/* <div className="col-span-1 flex flex-col justify-center items-center bg-inherit">
-            <img src={item.image} alt="" className="w-14 bg-inherit" />
-          </div>
-          <div className="col-span-3 grid grid-rows-7 bg-inherit">
-            <div className="row-span-6 flex flex-col gap-y-1 bg-inherit">
-              <h1 className="text-xs font-bold text-green-strong bg-inherit">
-                {item.title}
-              </h1>
-              <h1 className="text-xs bg-inherit lg:hidden">
-                {item.description.substring(0, 50)}...
-              </h1>
-              <h1 className="hidden lg:block lg:text-xs lg:bg-inherit">
-                {item.description}
-              </h1>
-              <div className="row-span-1 h-fit flex justify-between items-end bg-inherit">
-                <h1 className="text-xs font-bold text-green-strong bg-inherit">
-                  {item.price}
-                </h1>
-                <h1 className="text-xs bg-inherit">Qty: 1</h1>
-              </div>
-            </div>
-          </div> */}
-
           <div className="col-span-1 flex flex-col justify-center items-center bg-inherit">
             <h1 className="bg-inherit lg:text-4xl">{toRupiah(item.data)}</h1>
           </div>
@@ -97,19 +76,22 @@ const DetailMyTransaction = () => {
       </div>
       <div className="mx-4 mt-4 mb-2 font-bold text-lg">Detail Transaction</div>
       {uniqueDate.map((date) => {
-        let totalTransactionPerDay = 0
+        let totalTransactionPerDay = 0;
         return (
-        <div>
-          <div className="mx-4 font-bold">{dayjs(`${date}`).locale("en").format("D MMMM YYYY")}</div>
-          {item.result?.map((result) => {
-            if (result.createdAt === date) { 
-              totalTransactionPerDay += result.order_total;
-            }
-            else {return null}
-          })}
-          <div className="mx-4 mb-4">{toRupiah(totalTransactionPerDay)}</div>
-        </div>
-        )
+          <div>
+            <div className="mx-4 font-bold">
+              {dayjs(`${date}`).locale("en").format("D MMMM YYYY")}
+            </div>
+            {item.result?.map((result) => {
+              if (result.createdAt === date) {
+                totalTransactionPerDay += result.order_total;
+              } else {
+                return null;
+              }
+            })}
+            <div className="mx-4 mb-4">{toRupiah(totalTransactionPerDay)}</div>
+          </div>
+        );
       })}
       <div className="relative w-full h-11 mb-14 bottom-0 lg:hidden">
         <div>

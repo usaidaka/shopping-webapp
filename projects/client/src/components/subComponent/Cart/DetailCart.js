@@ -5,16 +5,16 @@ import { TrashIcon } from "@heroicons/react/24/outline";
 import dayjs from "dayjs";
 import toRupiah from "@develoka/angka-rupiah-js";
 import { useDispatch, useSelector } from "react-redux";
-import { setTotalCart } from "../../../thunk/cartSlice";
 
+import { setTotalCart } from "../../../thunk/cartSlice";
 import axios from "../../../api/axios";
 import withAuth from "../../../withAuth";
+import { setDetails } from "../../../thunk/countCartSlice";
 
 const DetailCart = () => {
   const dispatch = useDispatch();
   const totalCart = useSelector((state) => state.cart.value);
   const [items, setItems] = useState("");
-  
 
   const token = localStorage.getItem("token");
 
@@ -22,10 +22,19 @@ const DetailCart = () => {
     axios
       .get("/cart", { headers: { Authorization: `Bearer ${token}` } })
       .then((res) => {
-        setItems(res.data)
-        localStorage.setItem("totalPayment", toRupiah(res.data.total))
+        setItems(res.data.message);
+        const mapCart = res.data.message.map((cart) => ({
+          product_id: cart.product_id,
+          qty: cart.qty,
+        }));
+        for (let cartItem of mapCart) {
+          dispatch(setDetails(cartItem));
+        }
+        console.log(mapCart);
+        setItems(res.data);
+        localStorage.setItem("totalPayment", toRupiah(res.data.total));
       });
-  }, [token]);
+  }, [dispatch, token]);
 
   useEffect(() => {
     dispatch(setTotalCart(items.message?.length));
@@ -42,19 +51,23 @@ const DetailCart = () => {
             .get("/cart", {
               headers: { Authorization: `Bearer ${token}` },
             })
-            .then((res) => setItems(res.data));
+            .then((res) => {
+              setItems(res.data);
+              dispatch(
+                setDetails({
+                  product_id: items?.message[0]?.product_id,
+                  qty: 0,
+                })
+              );
+            });
         });
     } catch (error) {
       console.log(error);
     }
   };
-
   if (!items) {
     return <p></p>;
   }
-  console.log(items)
-  console.log(items.length);
-  console.log("haiiii", totalCart);
 
   return (
     <div>
@@ -62,10 +75,10 @@ const DetailCart = () => {
         <h1 className="font-semibold mt-4 text-2xl">Cart</h1>
       </div>
 
-      <div className="lg:flex lg:justify-center">
+      <div className="lg:flex lg:justify-center ">
         <div
           className={`lg:col-span-3  lg:mr-10 mx-2 lg:mx-10 lg:block ${
-            items.length === 0 ? "lg:w-[755px]" : null
+            items.message.length === 0 ? "lg:w-[755px]" : null
           }`}
         >
           {items.message?.map((item) => (
@@ -78,10 +91,7 @@ const DetailCart = () => {
                 <div className="drop-shadow-2xl mx-3 h-[120px] my-2 grid grid-cols-4 items-center p-2 rounded-lg bg-green-footer lg:w-full">
                   <div className="col-span-1 gap-2 flex flex-row justify-center items-center bg-inherit">
                     <div className="flex items-center gap-2 bg-inherit lg:justify-center lg:ml-10">
-                      <p
-                        id="remember"
-                        className="bg-inherit lg:mr-10 "
-                      ></p>
+                      <p className="bg-inherit lg:mr-10 "></p>
                     </div>
                     <img
                       src={item.Product?.image_product}
