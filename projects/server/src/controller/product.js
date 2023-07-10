@@ -168,8 +168,8 @@ const getProducts = async (req, res) => {
         },
         {
           model: User,
-          attributes: ["store_name"]
-        }
+          attributes: ["store_name"],
+        },
       ],
       where,
       limit: pagination.perPage,
@@ -202,11 +202,11 @@ const getProductById = async (req, res) => {
       where: { id: Number(id) },
       attributes: { exclude: ["product_id"] },
       include: [
-        { 
+        {
           model: User,
-          attributes: ["store_name"]
-        }
-      ]
+          attributes: ["store_name"],
+        },
+      ],
     });
 
     if (!result) {
@@ -238,14 +238,15 @@ const getUserProduct = async (req, res) => {
         user_id: user_id,
         status: status,
       },
-      include: [{
-        model: OrderLine,
-        attributes: [
-          "product_id",
-      ]
-      }, {
-        model: Category,
-      }],
+      include: [
+        {
+          model: OrderLine,
+          attributes: ["product_id"],
+        },
+        {
+          model: Category,
+        },
+      ],
       attributes: { exclude: ["product_id"] },
     });
 
@@ -299,29 +300,8 @@ const deleteProduct = async (req, res) => {
         message: "your product has been deleted",
       });
     }
-    const isProductInCartExist = await Cart.findOne({
-      where: { product_id: id },
-    });
 
-    if (isProductInCartExist) {
-      await Cart.destroy(
-        { where: { product_id: id, user_id: user_id } },
-        { transaction: t }
-      );
-    }
-
-    const isProductInOrderLine = await OrderLine.findOne({
-      where: { product_id: id },
-    });
-
-    if (isProductInOrderLine) {
-      await isProductInOrderLine.destroy(
-        {
-          where: { product_id: id },
-        },
-        { transaction: t }
-      );
-    }
+    await Cart.destroy({ where: { product_id: id } }, { transaction: t });
 
     const realImageURL = dataProduct
       .getDataValue("image_product")

@@ -86,19 +86,19 @@ const Register = () => {
         .required()
         .matches(
           /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[-_+=!@#$%^&*])(?=.{8,})/,
-          "Kata sandi harus ada huruf besar, huruf kecil, angka, dan karakter spesial"
+          "The password must contain uppercase, lowercase, numbers and special characters"
         ),
       confirmPassword: yup
         .string()
         .oneOf(
           [yup.ref("password"), null],
-          "Konfirmasi password harus sesuai dengan password"
+          "Password confirmation must match the password"
         )
         .matches(
           /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[-_+=!@#$%^&*])(?=.{8,})/,
-          "Kata sandi harus ada huruf besar, huruf kecil, angka, dan karakter spesial"
+          "The password must contain uppercase, lowercase, numbers and special characters"
         )
-        .required("Konfirmasi password harus diisi"),
+        .required("Password confirmation is required"),
     }),
     validateOnChange: false,
     validateOnBlur: false,
