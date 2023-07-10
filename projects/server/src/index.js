@@ -5,14 +5,28 @@ const { join } = require("path");
 
 const PORT = process.env.PORT || 8000;
 const app = express();
+const UserRoutes = require("./routes/user");
+const CategoryRoutes = require("./routes/category");
+const ProductRoutes = require("./routes/product");
+const CartRoutes = require("./routes/cart");
+const ShopOrderRoutes = require("./routes/shopOrder");
+const OrderLineRoutes = require("./routes/orderLine");
+const db = require("../models");
+
 app.use(cors());
-
 app.use(express.json());
+app.use("/photo-product", express.static("public/product"));
+app.use("/photo-profile", express.static("public/profile"));
 
-//#region API ROUTES
+// ----------------> #region API ROUTES <---------------------
+app.use("/api", UserRoutes);
+app.use("/api", CategoryRoutes);
+app.use("/api", ProductRoutes);
+app.use("/api", CartRoutes);
+app.use("/api", ShopOrderRoutes);
+app.use("/api", OrderLineRoutes);
 
 // ===========================
-// NOTE : Add your routes here
 
 app.get("/api", (req, res) => {
   res.send(`Hello, this is my API`);
