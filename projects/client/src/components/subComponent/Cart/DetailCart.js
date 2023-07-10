@@ -9,6 +9,7 @@ import { setTotalCart } from "../../../thunk/cartSlice";
 
 import axios from "../../../api/axios";
 import withAuth from "../../../withAuth";
+import { setDetails } from "../../../thunk/countCartSlice";
 
 const DetailCart = () => {
   const dispatch = useDispatch();
@@ -21,8 +22,18 @@ const DetailCart = () => {
   useEffect(() => {
     axios
       .get("/cart", { headers: { Authorization: `Bearer ${token}` } })
-      .then((res) => setItems(res.data.message));
-  }, [token]);
+      .then((res) => {
+        setItems(res.data.message);
+        const mapCart = res.data.message.map((cart) => ({
+          product_id: cart.product_id,
+          qty: cart.qty,
+        }));
+        for (let cartItem of mapCart) {
+          dispatch(setDetails(cartItem));
+        }
+        console.log(mapCart);
+      });
+  }, [dispatch, token]);
 
   useEffect(() => {
     dispatch(setTotalCart(items.length));

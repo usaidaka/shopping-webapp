@@ -21,4 +21,10 @@ routerUser.get(
   UserController.getUserInformation
 );
 
+// routerUser.delete(
+//   "/auth/delete-account",
+//   verifyToken,
+//   UserController.closeAccount
+// );
+
 module.exports = routerUser;

@@ -65,7 +65,7 @@ const InputEditProduct = () => {
           setIsSuccess(true);
           setTimeout(() => {
             navigate("/profile/my-store");
-          }, 3000);
+          }, 2000);
         })
         .catch((err) => {
           console.log(err);
@@ -161,26 +161,32 @@ const InputEditProduct = () => {
           </label>
           <div className="flex items-center gap-x-4">
             <div>
-              <select
-                id="categories"
-                className="bg-gray-200  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-strong focus:focus:border-green-strong block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-strong dark:focus:focus:border-green-strong h-10"
-                defaultValue={userProductValue.category_id}
-                onChange={(e) => {
-                  setSelectedCategory(e.target.value);
-                  formik.setFieldValue("category_id", e.target.value);
-                }}
-              >
-                <option value={0}>select a category</option>
-                {categories.map((category) => (
-                  <option
-                    key={category.id}
-                    defaultValue="Choose a category"
-                    value={category.id}
-                  >
-                    {category.category_name}
-                  </option>
-                ))}
-              </select>
+              <FormControl isInvalid={formik.errors.product_description}>
+                <select
+                  id="categories"
+                  className="bg-gray-200  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-strong focus:focus:border-green-strong block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-strong dark:focus:focus:border-green-strong h-10"
+                  defaultValue={userProductValue.category_id}
+                  onChange={(e) => {
+                    setSelectedCategory(e.target.value);
+                    formik.setFieldValue("category_id", e.target.value);
+                  }}
+                >
+                  <option value={""}>select a category</option>
+                  {categories.map((category) => (
+                    <option
+                      key={category.id}
+                      defaultValue={category.id}
+                      value={category.id}
+                    >
+                      {category.category_name}
+                    </option>
+                  ))}
+                </select>
+
+                <FormErrorMessage className="text-red-500 text-sm font-medium mx-3">
+                  {formik.errors.category_id}
+                </FormErrorMessage>
+              </FormControl>
             </div>
             <div>
               <h1>OR</h1>

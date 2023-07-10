@@ -17,10 +17,6 @@ const HomePage = () => {
     });
   }, []);
 
-  // const uniqueCategories = [
-  //   ...new Set(categories.result?.map((category) => category?.Category?.category_name)),
-  // ];
-
   function onClickCategory(cat) {
     setGetByCategory(cat);
   }

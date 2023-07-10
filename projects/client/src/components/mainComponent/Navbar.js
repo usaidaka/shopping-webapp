@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Dialog, Popover } from "@headlessui/react";
 import {
   Bars3Icon,
@@ -10,14 +10,24 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setTokenAccess } from "../../thunk/authSlice";
 import tokokita from "../../assets/tokokita.png";
+import axios from "../../api/axios";
+import { setTotalCart } from "../../thunk/cartSlice";
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const token = useSelector((state) => state.auth.value);
+  const token = localStorage.getItem("token");
   const totalCart = useSelector((state) => state.cart.value);
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    axios
+      .get("/cart", { headers: { Authorization: `Bearer ${token}` } })
+      .then((res) => {
+        dispatch(setTotalCart(res.data.message.length));
+      });
+  }, [dispatch, token]);
 
   const handleLogOut = () => {
     dispatch(setTokenAccess(null));

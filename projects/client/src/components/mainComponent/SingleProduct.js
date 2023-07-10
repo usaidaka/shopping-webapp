@@ -6,43 +6,75 @@ import {
 import toRupiah from "@develoka/angka-rupiah-js";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "../../api/axios";
+import {
+  decrement,
+  increment,
+  setCountCart,
+  setDetails,
+} from "../../thunk/countCartSlice";
 
 const SingleProduct = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const [item, setItem] = useState("");
-  const [count, setCount] = useState(0);
   const [errMsg, setErrMsg] = useState("");
   const [isSuccess, setIsSuccess] = useState("");
+  const countCart = useSelector((state) => {
+    const index = state.countCart.details.findIndex((x) => {
+      return x.product_id === Number(id);
+    });
+    if (index !== -1) {
+      return state.countCart.details[index].qty;
+    }
+    return 0;
+  });
+  const [inputCartQty, setInputCartQty] = useState(0);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     axios.get(`/products/${id}`).then((res) => setItem(res.data.data));
-  }, []);
+  }, [id]);
+
+  useEffect(() => {
+    setInputCartQty(countCart);
+  }, [countCart]);
 
   const handleAddToCart = async () => {
     try {
-      if (count > 0) {
-        await axios.post(
-          "/cart",
-          { product_id: item.id, qty: count },
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-        setCount(0);
-        setIsSuccess("transaction success");
+      if (!token) {
+        setErrMsg("you need to login");
         setTimeout(() => {
-          navigate("/cart");
-        }, 3000);
+          navigate("/login");
+        }, 2000);
       } else {
-        setErrMsg("you have to put quantity to checkout");
+        if (inputCartQty > 0) {
+          await axios.post(
+            "/cart",
+            { product_id: item.id, qty: inputCartQty },
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          );
+
+          // dispatch(setCountCart(countCart));
+          dispatch(setDetails({ product_id: item.id, qty: countCart }));
+          setIsSuccess("transaction success");
+
+          setTimeout(() => {
+            navigate("/cart");
+          }, 2000);
+        } else {
+          setErrMsg("you have to put quantity to checkout");
+        }
       }
     } catch (error) {
       console.log(error);
     }
   };
+  console.log("aaa", countCart);
 
   if (!item) {
     return <p></p>;
@@ -59,18 +91,6 @@ const SingleProduct = () => {
           <p className="bg-inherit">{errMsg}</p>
         </div>
       ) : null}
-      {/*     {isSuccess ? (
-        <div className="w-full bg-blue-200 text-blue-700 h-10 rounded-lg flex justify-center items-center mt-2 lg:hidden">
-          <p className="bg-inherit">{isSuccess}</p>
-        </div>
-      ) : null}
-
-      {}
-      {errMsg ? (
-        <div className="w-full flex bg-red-200 text-red-700 h-10 rounded-lg justify-center items-center mt-2 lg:flex lg:justify-center lg:w-[500px] lg:mx-auto lg:my-5">
-          <p className="bg-inherit">{errMsg}</p>
-        </div>
-      ) : null} */}
 
       <div className="grid grid-rows-6 mx-3 mb-16 gap-2 lg:grid lg:grid-rows-1 lg:grid-cols-3">
         <div className="row-span-1 w-7 lg:hidden ">
@@ -99,10 +119,10 @@ const SingleProduct = () => {
           </div>
           <div className="col-span-1 mx-auto lg:flex lg:bg-inherit">
             <h1 className="hidden lg:block lg:font-semibold lg:text-2xl lg:bg-inherit">
-              subtotal: {toRupiah(item.price * count)}
+              subtotal: {toRupiah(item.price * countCart)}
             </h1>
             <h1 className="font-bold text-base lg:bg-inherit lg:hidden">
-              {toRupiah(item.price * count)}
+              {toRupiah(item.price * countCart)}
             </h1>
           </div>
           <div className="col-span-1 flex justify-center gap-4 items-center lg:grid lg:bg-inherit">
@@ -110,17 +130,24 @@ const SingleProduct = () => {
               <button
                 className="w-10 block bg-green-strong rounded-lg"
                 onClick={() => {
-                  count > 0 ? setCount(count - 1) : setCount(0);
+                  countCart > 0
+                    ? dispatch(decrement())
+                    : dispatch(setCountCart(0));
+
+                  setInputCartQty(inputCartQty - 1);
                 }}
               >
                 <MinusIcon className="bg-inherit text-yellow-active rounded-lg" />
               </button>
-              <h1 className="text-2xl bg-inherit ">{count}</h1>
-              <button className="w-10 block  bg-green-strong rounded-lg">
-                <PlusIcon
-                  className="bg-inherit text-yellow-active rounded-lg"
-                  onClick={() => setCount(count + 1)}
-                />
+              <h1 className="text-2xl bg-inherit ">{inputCartQty}</h1>
+              <button
+                className="w-10 block  bg-green-strong rounded-lg "
+                onClick={() => {
+                  dispatch(increment());
+                  setInputCartQty(inputCartQty + 1);
+                }}
+              >
+                <PlusIcon className="bg-inherit text-yellow-active rounded-lg" />
               </button>
             </div>
             <div>

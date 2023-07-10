@@ -12,6 +12,7 @@ const Register = () => {
   const navigate = useNavigate();
   const [errMsg, setErrMsg] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const registerUser = async (values, { setStatus, setValues }) => {
     try {
@@ -110,6 +111,9 @@ const Register = () => {
 
   const togglePassword = () => {
     setShowPassword(!showPassword);
+  };
+  const toggleConfirmPassword = () => {
+    setShowConfirmPassword(!showConfirmPassword);
   };
 
   return (
@@ -245,7 +249,7 @@ const Register = () => {
                     <input
                       onChange={handleForm}
                       placeholder="confirm password"
-                      type={showPassword ? "text" : "password"}
+                      type={showConfirmPassword ? "text" : "password"}
                       name="confirmPassword"
                       className="py-1 px-2 rounded-md bg-zinc-200 mx-3 text-green-strong"
                       autoComplete="off"
@@ -254,7 +258,7 @@ const Register = () => {
                     <button
                       type="button"
                       className="w-full flex justify-end rounded-md text-center items-center mt-1"
-                      onClick={togglePassword}
+                      onClick={toggleConfirmPassword}
                     >
                       <span className="flex text-xs mr-2 items-center">
                         show password <EyeIcon className="w-5" />
