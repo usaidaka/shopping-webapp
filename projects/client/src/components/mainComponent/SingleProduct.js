@@ -22,6 +22,7 @@ const SingleProduct = () => {
   const [item, setItem] = useState("");
   const [errMsg, setErrMsg] = useState("");
   const [isSuccess, setIsSuccess] = useState("");
+  const count = useSelector((state) => state.countCart.value);
   const countCart = useSelector((state) => {
     const index = state.countCart.details.findIndex((x) => {
       return x.product_id === Number(id);
@@ -119,7 +120,7 @@ const SingleProduct = () => {
           </div>
           <div className="col-span-1 mx-auto lg:flex lg:bg-inherit">
             <h1 className="hidden lg:block lg:font-semibold lg:text-2xl lg:bg-inherit">
-              subtotal: {toRupiah(item.price * countCart)}
+              subtotal: {toRupiah(item.price * inputCartQty)}
             </h1>
             <h1 className="font-bold text-base lg:bg-inherit lg:hidden">
               {toRupiah(item.price * countCart)}
@@ -130,11 +131,13 @@ const SingleProduct = () => {
               <button
                 className="w-10 block bg-green-strong rounded-lg"
                 onClick={() => {
-                  countCart > 0
-                    ? dispatch(decrement())
-                    : dispatch(setCountCart(0));
-
-                  setInputCartQty(inputCartQty - 1);
+                  if (countCart > 0 || inputCartQty > 0) {
+                    dispatch(decrement());
+                    setInputCartQty(inputCartQty - 1);
+                  } else {
+                    dispatch(setCountCart(0));
+                    setInputCartQty(inputCartQty);
+                  }
                 }}
               >
                 <MinusIcon className="bg-inherit text-yellow-active rounded-lg" />

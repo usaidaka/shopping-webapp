@@ -48,15 +48,6 @@ const DetailStoreTransaction = () => {
         </div>
         {/* DATE PICKER */}
         <div className="mx-4 grid grid-rows-2 gap-2 lg:grid-cols-2 my-3">
-          <div className="row-span-1 lg:col-span-1 flex">
-            <div className="flex my-auto w-10 lg:w-auto">From</div>
-            <input
-              type="date"
-              onChange={(e) => setStartDate(e.target.value)}
-              value={startDate}
-              className="w-full mx-2 rounded-md bg-gray-100 border-none"
-            />
-          </div>
           {/* DATE PICKER */}
           <div className="grid grid-rows-2 gap-2 lg:grid-cols-2 my-3">
             <div className="row-span-1 lg:col-span-1 flex">
@@ -84,55 +75,12 @@ const DetailStoreTransaction = () => {
             Total Income
           </h1>
           <div className="pl-8 drop-shadow-2xl mx-3 h-[130px] my-2 grid grid-cols-4 items-center p-2 rounded-lg bg-green-footer">
-            {/*  <div className="col-span-1 flex flex-col justify-center items-center bg-inherit">
-            <img src={item.image} alt="" className="w-14 bg-inherit" />
-          </div>
-          <div className="col-span-3 grid grid-rows-7 bg-inherit">
-            <div className="row-span-6 flex flex-col gap-y-1 bg-inherit">
-              <div className="bg-inherit flex justify-between">
-                <h1 className="text-xs font-bold text-green-strong bg-inherit">
-                  {item.title}
-                </h1>
-                <h1 className="text-xs bg-inherit font-semibold">Qty: 1</h1>
-              </div>
-              <h1 className="text-xs bg-inherit lg:hidden">
-                {item.description.substring(0, 50)}...
-              </h1>
-              <h1 className="hidden lg:block lg:text-xs lg:bg-inherit">
-                {item.description}
-              </h1>
-              <div className="row-span-1 h-fit flex justify-between items-end bg-inherit">
-                <h1 className="text-xs font-bold text-green-strong bg-inherit">
-                  {item.price}
-                </h1>
-                <div className="w-fit h-fit bg-inherit">
-                  <TrashIcon className="w-5 text-red-500 bg-inherit" />
-                </div>
-              </div>
-            </div>
-          </div> */}
-
             <div className="col-span-1 flex flex-col justify-center items-center bg-inherit">
               <h1 className="bg-inherit lg:text-4xl">{toRupiah(item.total)}</h1>
             </div>
           </div>
         </div>
-        {uniqueDate.map((date) => {
-          let totalIncomePerDay = 0;
-          return (
-            <div>
-              <div>{dayjs(`${date}`).locale("en").format("D MMMM YYYY")}</div>
-              {item.data?.map((data) => {
-                if (data.ShopOrder.createdAt === date) {
-                  totalIncomePerDay += data.Product.price;
-                } else {
-                  return null;
-                }
-              })}
-              <div>{toRupiah(totalIncomePerDay)}</div>
-            </div>
-          );
-        })}
+
         <div className="relative w-full h-11 mb-14 bottom-0 lg:hidden">
           <div>
             <hr className="h-[3px] bg-green-soft mx-3 mb-1" />

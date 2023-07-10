@@ -121,7 +121,7 @@ export default function Navbar() {
                   {totalCart}
                 </h1>
               )}
-              
+
               <ShoppingCartIcon />
             </Link>
             <button
